@@ -4,7 +4,7 @@ import Navbar from "../pages/shared/Navbar/Navbar";
 
 const MainLayout = () => {
   return (
-    <div>
+    <div className="bg-linear-to-br from-gray-900 via-gray-800 to-gray-900">
       <Navbar></Navbar>
       <div>
         <Outlet></Outlet>

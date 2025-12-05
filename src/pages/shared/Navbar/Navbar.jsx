@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaUserCircle, FaShoppingBag, FaSignOutAlt } from "react-icons/fa";
@@ -17,14 +18,14 @@ const Navbar = () => {
 
   const navLinks = [
     { label: "Home", href: "/", icon: MdHome },
-    { label: "All Product", href: "/all-product", icon: BiSolidShoppingBags },
+    { label: "All Product", href: "/all-products", icon: BiSolidShoppingBags },
     { label: "About Us", href: "/about", icon: FaShoppingBag },
     { label: "Contact", href: "/contact", icon: MdContactMail },
     { label: "Dashboard", href: "/dashboard", icon: MdDashboard },
   ];
 
   return (
-    <nav className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 shadow-2xl sticky top-0 z-50">
+    <nav className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 shadow-2xl sticky top-0 z-50 max-w-7xl mx-auto rounded">
       <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20 lg:h-24">
           {/* Logo */}
@@ -46,10 +47,15 @@ const Navbar = () => {
             {navLinks.map((link) => {
               const IconComponent = link.icon;
               return (
-                <a
+                <NavLink
                   key={link.label}
-                  href={link.href}
-                  className="flex items-center space-x-1 md:space-x-2 text-xs md:text-sm lg:text-base text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium relative group"
+                  to={link.href}
+                  end={link.href === "/"}
+                  className={({ isActive }) =>
+                    `flex items-center space-x-1 md:space-x-2 text-xs md:text-sm lg:text-base transition-colors duration-300 font-medium relative group ${
+                      isActive ? "text-cyan-400 font-semibold" : "text-gray-300"
+                    }`
+                  }
                 >
                   <IconComponent className="text-sm md:text-base lg:text-lg shrink-0" />
                   <span className="hidden lg:inline">{link.label}</span>
@@ -57,7 +63,7 @@ const Navbar = () => {
                     {link.label.split(" ")[0]}
                   </span>
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
-                </a>
+                </NavLink>
               );
             })}
           </div>
@@ -113,15 +119,22 @@ const Navbar = () => {
               {navLinks.map((link) => {
                 const IconComponent = link.icon;
                 return (
-                  <a
+                  <NavLink
                     key={link.label}
-                    href={link.href}
-                    className="flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 rounded-lg transition-all duration-300 font-medium"
+                    to={link.href}
+                    end={link.href === "/"}
                     onClick={() => setIsOpen(false)}
+                    className={({ isActive }) =>
+                      `flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base transition-all duration-300 font-medium rounded-lg ${
+                        isActive
+                          ? "text-cyan-400 bg-gray-800/50"
+                          : "text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50"
+                      }`
+                    }
                   >
                     <IconComponent className="text-base sm:text-lg shrink-0" />
                     <span>{link.label}</span>
-                  </a>
+                  </NavLink>
                 );
               })}
 
