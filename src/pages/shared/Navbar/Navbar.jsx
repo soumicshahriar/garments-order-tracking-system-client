@@ -1,0 +1,156 @@
+import React, { useState } from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineClose } from "react-icons/ai";
+import { FaUserCircle, FaShoppingBag, FaSignOutAlt } from "react-icons/fa";
+import { MdDashboard, MdHome, MdContactMail } from "react-icons/md";
+import { BiSolidShoppingBags } from "react-icons/bi";
+import { FiLogIn } from "react-icons/fi";
+import { IoPersonAddSharp } from "react-icons/io5";
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const navLinks = [
+    { label: "Home", href: "/", icon: MdHome },
+    { label: "All Product", href: "/all-product", icon: BiSolidShoppingBags },
+    { label: "About Us", href: "/about", icon: FaShoppingBag },
+    { label: "Contact", href: "/contact", icon: MdContactMail },
+    { label: "Dashboard", href: "/dashboard", icon: MdDashboard },
+  ];
+
+  return (
+    <nav className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 shadow-2xl sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16 sm:h-20 lg:h-24">
+          {/* Logo */}
+          <div className="shrink-0">
+            <a href="/" className="flex items-center group">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-linear-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                <span className="text-white font-bold text-sm sm:text-lg lg:text-xl">
+                  GO
+                </span>
+              </div>
+              <span className="hidden sm:block ml-2 sm:ml-3 text-sm sm:text-lg lg:text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400 whitespace-nowrap">
+                Garments Order
+              </span>
+            </a>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
+            {navLinks.map((link) => {
+              const IconComponent = link.icon;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="flex items-center space-x-1 md:space-x-2 text-xs md:text-sm lg:text-base text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium relative group"
+                >
+                  <IconComponent className="text-sm md:text-base lg:text-lg shrink-0" />
+                  <span className="hidden lg:inline">{link.label}</span>
+                  <span className="inline lg:hidden" title={link.label}>
+                    {link.label.split(" ")[0]}
+                  </span>
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300"></span>
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Right Side - Auth & User */}
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
+            {isLoggedIn ? (
+              <>
+                <div className="flex items-center space-x-2 lg:space-x-3 pl-2 lg:pl-4 border-l border-gray-700">
+                  <FaUserCircle className="text-cyan-400 text-xl md:text-2xl lg:text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
+                  <button className="hidden lg:flex items-center space-x-2 px-3 lg:px-4 py-1 lg:py-2 bg-red-600 hover:bg-red-700 text-white text-xs lg:text-sm rounded-lg font-medium transition-colors duration-300 transform hover:scale-105">
+                    <FaSignOutAlt className="text-sm lg:text-lg" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <button className="flex items-center space-x-1 px-3 py-1 md:px-4 md:py-1.5 lg:px-5 lg:py-2 text-cyan-400 border-2 border-cyan-400 rounded-lg text-xs md:text-xs lg:text-sm font-medium hover:bg-cyan-400 hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                  <FiLogIn className="text-xs md:text-sm lg:text-lg shrink-0" />
+                  <span className="hidden lg:inline">Login</span>
+                </button>
+                <button className="flex items-center space-x-1 px-3 py-1 md:px-4 md:py-1.5 lg:px-5 lg:py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-xs md:text-xs lg:text-sm rounded-lg font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105">
+                  <IoPersonAddSharp className="text-xs md:text-sm lg:text-lg shrink-0" />
+                  <span className="hidden lg:inline">Register</span>
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center space-x-2 sm:space-x-3">
+            {isLoggedIn ? (
+              <FaUserCircle className="text-cyan-400 text-lg sm:text-2xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
+            ) : null}
+            <button
+              onClick={toggleMenu}
+              className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 text-lg sm:text-2xl"
+            >
+              {isOpen ? (
+                <AiOutlineClose className="text-lg sm:text-2xl" />
+              ) : (
+                <GiHamburgerMenu className="text-lg sm:text-2xl" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden pb-3 sm:pb-4 border-t border-gray-700 animate-in fade-in slide-in-from-top-2">
+            <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-4">
+              {navLinks.map((link) => {
+                const IconComponent = link.icon;
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className="flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 rounded-lg transition-all duration-300 font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <IconComponent className="text-base sm:text-lg shrink-0" />
+                    <span>{link.label}</span>
+                  </a>
+                );
+              })}
+
+              {/* Mobile Auth Buttons */}
+              <div className="pt-3 sm:pt-4 border-t border-gray-700 space-y-2">
+                {isLoggedIn ? (
+                  <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm sm:text-base rounded-lg font-medium transition-colors duration-300">
+                    <FaSignOutAlt className="text-base sm:text-lg" />
+                    <span>Logout</span>
+                  </button>
+                ) : (
+                  <>
+                    <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 text-cyan-400 border-2 border-cyan-400 rounded-lg text-sm sm:text-base font-medium hover:bg-cyan-400 hover:text-gray-900 transition-all duration-300">
+                      <FiLogIn className="text-base sm:text-lg" />
+                      <span>Login</span>
+                    </button>
+                    <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-sm sm:text-base rounded-lg font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300">
+                      <IoPersonAddSharp className="text-base sm:text-lg" />
+                      <span>Register</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
