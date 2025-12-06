@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaUserCircle, FaShoppingBag, FaSignOutAlt } from "react-icons/fa";
@@ -82,14 +82,20 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <button className="flex items-center space-x-1 px-3 py-1 md:px-4 md:py-1.5 lg:px-5 lg:py-2 text-cyan-400 border-2 border-cyan-400 rounded-lg text-xs md:text-xs lg:text-sm font-medium hover:bg-cyan-400 hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                <Link
+                  to="/login"
+                  className="flex items-center space-x-1 px-3 py-1 md:px-4 md:py-1.5 lg:px-5 lg:py-2 text-cyan-400 border-2 border-cyan-400 rounded-lg text-xs md:text-xs lg:text-sm font-medium hover:bg-cyan-400 hover:text-gray-900 transition-all duration-300 transform hover:scale-105"
+                >
                   <FiLogIn className="text-xs md:text-sm lg:text-lg shrink-0" />
                   <span className="hidden lg:inline">Login</span>
-                </button>
-                <button className="flex items-center space-x-1 px-3 py-1 md:px-4 md:py-1.5 lg:px-5 lg:py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-xs md:text-xs lg:text-sm rounded-lg font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105">
+                </Link>
+                <Link
+                  to="/register"
+                  className="flex items-center space-x-1 px-3 py-1 md:px-4 md:py-1.5 lg:px-5 lg:py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-xs md:text-xs lg:text-sm rounded-lg font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105"
+                >
                   <IoPersonAddSharp className="text-xs md:text-sm lg:text-lg shrink-0" />
                   <span className="hidden lg:inline">Register</span>
-                </button>
+                </Link>
               </>
             )}
           </div>
@@ -147,14 +153,20 @@ const Navbar = () => {
                   </button>
                 ) : (
                   <>
-                    <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 text-cyan-400 border-2 border-cyan-400 rounded-lg text-sm sm:text-base font-medium hover:bg-cyan-400 hover:text-gray-900 transition-all duration-300">
+                    <Link
+                      to="/login"
+                      className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 text-cyan-400 border-2 border-cyan-400 rounded-lg text-sm sm:text-base font-medium hover:bg-cyan-400 hover:text-gray-900 transition-all duration-300"
+                    >
                       <FiLogIn className="text-base sm:text-lg" />
                       <span>Login</span>
-                    </button>
-                    <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-sm sm:text-base rounded-lg font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300">
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-sm sm:text-base rounded-lg font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all duration-300"
+                    >
                       <IoPersonAddSharp className="text-base sm:text-lg" />
                       <span>Register</span>
-                    </button>
+                    </Link>
                   </>
                 )}
               </div>
