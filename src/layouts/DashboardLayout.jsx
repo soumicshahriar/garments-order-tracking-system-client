@@ -1,4 +1,4 @@
-import React from "react";
+import { MdManageAccounts } from "react-icons/md";
 import { Link, Outlet } from "react-router";
 
 const DashboardLayout = () => {
@@ -70,6 +70,17 @@ const DashboardLayout = () => {
                     <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                   </svg>
                   <span className="is-drawer-close:hidden">Homepage</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to={"/dashboard/manage-users"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Manage Users"
+                >
+                  <MdManageAccounts className="text-cyan-400" size={20} />
+                  <span className="is-drawer-close:hidden">Manage Users</span>
                 </Link>
               </li>
 
