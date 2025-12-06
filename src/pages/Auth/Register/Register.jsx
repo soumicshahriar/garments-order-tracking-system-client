@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import useAxios from "../../../hooks/useAxios";
 import useAuth from "../../../hooks/useAuth";
+import useAxios from "../../../hooks/useAxios";
 
 // Register page: uses react-hook-form for validation and react-hot-toast for feedback
 const Register = () => {
   const { createUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -16,11 +17,10 @@ const Register = () => {
     reset,
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  //   const navigate = useNavigate();
-  //   const axios = useAxios();
+  const navigate = useNavigate();
+  const axiosInstance = useAxios();
 
   const onSubmit = async (data) => {
-    // Ensure status default is 'pending'
     const payload = {
       name: data.name,
       email: data.email,
@@ -29,31 +29,27 @@ const Register = () => {
       status: "pending",
     };
 
-    createUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
-        toast.success("user created successful");
-      })
-      .catch((error) => {
-        toast.error(error.message);
-        console.log(error.message);
-      });
+    try {
+      // Step 1: Create user in Firebase
+      const authResult = await createUser(data.email, data.password);
+      if (!authResult.user) throw new Error("Firebase authentication failed");
 
-    // add data to the firebase
+      // Step 2: Send user data to backend
+      await axiosInstance.post("/users", payload);
 
-    // try {
-    //   // Try to save the user to backend (if available)
-    //   await axios.post("/users", payload);
-    //   // Show success toast and redirect to login
-    //   toast.success("Account created successfully! Please login.");
-    //   reset();
-    //   navigate("/login");
-    // } catch (err) {
-    //   // If backend not available or error, still notify user clearly
-    //   const message =
-    //     err?.response?.data?.message || err.message || "Registration failed";
-    //   toast.error(message);
-    // }
+      // Step 3: Show success toast and redirect
+      toast.success("Account created successfully! Please log in.");
+      reset();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      // Handle both Firebase and backend errors
+      //   const message =
+      //     error?.response?.data?.message ||
+      //     error.message ||
+      //     "Registration failed. Please try again.";
+      toast.error("Email is already used");
+    }
   };
 
   // Custom password validator to provide specific error messages
@@ -151,9 +147,10 @@ const Register = () => {
           <div>
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full py-2 rounded-md bg-linear-to-r from-cyan-500 to-blue-600 text-white font-medium hover:shadow-lg hover:scale-[1.01] transition-all"
             >
-              Register
+              {isLoading ? "Creating..." : "Register"}
             </button>
           </div>
         </form>

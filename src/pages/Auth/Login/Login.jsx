@@ -15,7 +15,7 @@ const Login = () => {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const axios = useAxios();
+  const axiosInstance = useAxios();
 
   const onSubmit = async (data) => {
     signInUser(data.email, data.password)
@@ -45,14 +45,30 @@ const Login = () => {
   };
 
   //   google sing in
-  const handleGoogleLogIn = () => {
-    googleSignIn()
-      .then(() => {
-        toast.success("Login Successfully");
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+  const handleGoogleLogIn = async () => {
+    try {
+      const result = await googleSignIn();
+      const data = result.user;
+
+      const payload = {
+        name: data.displayName,
+        email: data.email,
+        photoURL: data.photoURL || "",
+        role: "buyer",
+        status: "pending",
+      };
+
+      // Post data to backend
+      const response = await axiosInstance.post("/users", payload);
+
+      if (response.data) {
+        toast.success("Login successful!");
+      } else {
+        toast.error("Something went wrong while creating user.");
+      }
+    } catch (error) {
+      toast.error(error.message || "Google login failed");
+    }
   };
 
   return (
