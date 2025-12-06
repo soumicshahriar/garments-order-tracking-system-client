@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../../../hooks/useAxios";
-import { FiEdit, FiUserCheck, FiUserX } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiUserCheck, FiUserX } from "react-icons/fi";
 import { MdAdminPanelSettings, MdSupervisorAccount } from "react-icons/md";
 import { FaUserTie } from "react-icons/fa"; // batch icon
 import toast from "react-hot-toast";
@@ -12,6 +12,10 @@ const ManageUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");
   const [batch, setBatch] = useState("");
+
+  //   filtering state
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   // Fetch all users
   const {
@@ -29,6 +33,13 @@ const ManageUsers = () => {
   if (isPending) {
     return <Loader></Loader>;
   }
+
+  //   filtered user
+  const filteredUser = allUsers.filter((user) => {
+    const roleMatch = roleFilter === "all" || user.role === roleFilter;
+    const statusMatch = statusFilter === "all" || user.status === statusFilter;
+    return roleMatch && statusMatch;
+  });
 
   const handleUpdateRole = async () => {
     if (!selectedRole) return toast.error("Please select a role");
@@ -64,11 +75,51 @@ const ManageUsers = () => {
     }
   };
 
+  const handleDeleteUser = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await axiosInstance.delete(`/users/${id}`);
+      toast.success("User deleted successfully");
+      refetch();
+    } catch (error) {
+      toast.error("Failed to delete user");
+    }
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4 text-gray-200">
-        Manage Users
+        Manage Users : ({allUsers.length})
       </h2>
+
+      {/* filter */}
+      <div className="flex gap-10 my-10">
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+          className="border-r-4 border-l-4 rounded p-1 bg-gray-700 text-base"
+        >
+          <option value="all">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="buyer">Buyer</option>
+        </select>
+
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="border-r-4 border-l-4 rounded p-1 bg-gray-700 text-base"
+        >
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="suspend">Suspend</option>
+        </select>
+      </div>
 
       <div className="overflow-x-auto rounded-lg shadow-lg">
         <table className="table table-zebra w-full text-gray-300">
@@ -84,7 +135,7 @@ const ManageUsers = () => {
           </thead>
 
           <tbody>
-            {allUsers.map((user, index) => (
+            {filteredUser.map((user, index) => (
               <tr key={user._id} className="hover:bg-gray-800/60">
                 <td>{index + 1}</td>
                 <td className="font-medium">{user.name}</td>
@@ -150,6 +201,7 @@ const ManageUsers = () => {
 
                 {/* Approve/Suspend */}
                 <td className="flex gap-2 justify-center">
+                  {/* btn approve */}
                   <button
                     onClick={() => handleStatusChange(user._id, "approved")}
                     disabled={user.status === "approved"} // disable if already approved
@@ -163,6 +215,7 @@ const ManageUsers = () => {
                     <FiUserCheck size={16} />
                   </button>
 
+                  {/* button suspend */}
                   <button
                     onClick={() => handleStatusChange(user._id, "suspended")}
                     disabled={user.status === "suspended"} // disable if already suspended
@@ -174,6 +227,15 @@ const ManageUsers = () => {
                     title="Suspend"
                   >
                     <FiUserX size={16} />
+                  </button>
+
+                  {/* btn for delete */}
+                  <button
+                    onClick={() => handleDeleteUser(user._id)}
+                    className="btn btn-sm btn-warning flex items-center gap-1"
+                    title="Delete User"
+                  >
+                    <FiTrash2 size={16} className="text-black" />
                   </button>
                 </td>
               </tr>
