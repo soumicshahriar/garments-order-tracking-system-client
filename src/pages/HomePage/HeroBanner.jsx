@@ -3,8 +3,12 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import React, { useState, useRef } from "react";
+import "./HeroBanner.css";
+import { Link } from "react-router";
 
 const HeroBanner = ({ allProducts = [] }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const fallback = [
     {
       id: "f1",
@@ -31,64 +35,83 @@ const HeroBanner = ({ allProducts = [] }) => {
           .filter((p) => p.showOnHome) // Only products for homepage
           .map((p) => ({
             id: p._id,
-            title: p.title,
-            subtitle: `$${p.price}`,
-            image: p.images?.[0] || fallback[0].image,
+            title: p.title || p.productName || "",
+            price: `$${p.price}`,
+            imageMain: p.images?.[0] || fallback[0].image,
+            imagePeek: p.images?.[1] || p.images?.[0] || fallback[1].image,
           }))
-      : fallback;
+      : fallback.map((f) => ({
+          id: f.id,
+          title: f.title,
+          subtitle: f.subtitle,
+          imageMain: f.image,
+          imagePeek: f.image,
+        }));
+
+  const swiperRef = useRef(null);
 
   return (
-    <div className="max-w-7xl mx-auto mt-15">
+    <div className="hero-slider-container max-w-7xl mx-auto mt-8">
       <section className="w-full">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           slidesPerView={1}
           loop={true}
-          autoplay={{ delay: 3800, disableOnInteraction: false }}
+          autoplay={{
+            delay: 6000,
+            disableOnInteraction: false,
+            waitForTransition: true,
+          }}
+          speed={900}
           navigation={true}
           pagination={{ clickable: true }}
           grabCursor={true}
-          className="h-[260px] sm:h-[340px] md:h-[420px] lg:h-[520px]"
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          className="h-auto"
         >
           {slides.map((item, idx) => (
             <SwiperSlide key={item.id || idx}>
-              <div className="relative w-full h-full rounded-lg overflow-hidden">
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
-                  style={{
-                    backgroundImage: `url('${item.image}')`,
-                  }}
-                />
-
-                <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent" />
-
-                <div className="absolute left-4 sm:left-8 lg:left-12 bottom-6 sm:bottom-10 lg:bottom-16 text-white">
-                  <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold">
-                    {item.title}
-                  </h2>
-                  <p className="mt-2 text-sm sm:text-base md:text-lg text-cyan-200/90">
-                    {item.subtitle}
-                  </p>
-
-                  <div className="mt-4 flex items-center space-x-3">
-                    <a
-                      href="#"
-                      className="inline-flex items-center px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 rounded-md text-sm sm:text-base font-semibold shadow-lg hover:scale-105"
-                    >
+              <div className={`slide ${activeIndex === idx ? "active" : ""}`}>
+                <div className="content text-center">
+                  <h1 className="categoryTitle">{item.title}</h1>
+                  <p className="description">{item.price}</p>
+                  <div>
+                    <p href="#" className="exploreButton">
                       Shop Now
-                    </a>
-                    <a
+                    </p>
+                    <Link
                       href="#"
-                      className="hidden sm:inline-block px-3 py-2 border border-gray-300 text-gray-200 rounded-md hover:bg-gray-800/60"
+                      className="ml-3 text-sm text-cyan-200/80  sm:inline-block"
                     >
                       View Details
-                    </a>
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="imageCardContainer">
+                  <div className="mainImageCard">
+                    <img src={item.imageMain} alt={item.title} />
+                  </div>
+                  <div className="peekImageCard">
+                    <img src={item.imagePeek} alt={`${item.title}-peek`} />
                   </div>
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
+
+        <div className="navigationDots" aria-hidden>
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              className={`dot ${index === activeIndex ? "dotActive" : ""}`}
+              onClick={() => swiperRef.current?.slideToLoop(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </section>
     </div>
   );

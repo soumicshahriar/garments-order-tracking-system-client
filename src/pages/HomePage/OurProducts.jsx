@@ -152,10 +152,13 @@ const OurProducts = () => {
                   </div>
 
                   {/* View Details Button */}
-                  <button className="w-full mt-4 px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center space-x-2 transform hover:scale-105">
+                  <Link
+                    to={`product-details/${product._id}`}
+                    className="w-full mt-4 px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center space-x-2 transform hover:scale-105"
+                  >
                     <FaShoppingCart className="text-lg" />
                     <span>View Details</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}

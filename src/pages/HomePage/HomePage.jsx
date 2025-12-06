@@ -20,6 +20,7 @@ const HomePage = () => {
   return (
     <div>
       <HeroBanner allProducts={allProducts}></HeroBanner>
+      {/* <Slider></Slider> */}
       <OurProducts></OurProducts>
     </div>
   );
