@@ -15,9 +15,11 @@ const OurProducts = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["products", 6],
+    queryKey: ["homeProducts", 6],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/all-products?limit=6`);
+      const res = await axiosInstance.get(
+        `/all-products?homeOnly=true&limit=6`
+      );
       return res.data;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes

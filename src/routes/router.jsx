@@ -7,6 +7,7 @@ import Register from "../pages/Auth/Register/Register";
 import Login from "../pages/Auth/Login/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import ManageUsers from "../pages/Dashboards/AdminDashBoard/ManageUsers/ManageUsers";
+import Products from "../pages/Dashboards/AdminDashBoard/Products/Products";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,9 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <DashboardLayout></DashboardLayout>,
-    children: [{ path: "manage-users", Component: ManageUsers }],
+    children: [
+      { path: "manage-users", Component: ManageUsers },
+      { path: "all-products", Component: Products },
+    ],
   },
 ]);
