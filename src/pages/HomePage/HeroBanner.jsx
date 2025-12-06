@@ -51,7 +51,7 @@ const HeroBanner = ({ allProducts = [] }) => {
   const swiperRef = useRef(null);
 
   return (
-    <div className="hero-slider-container max-w-7xl mx-auto mt-8">
+    <div className="hero-slider-container max-w-7xl mx-auto mt-20">
       <section className="w-full">
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}

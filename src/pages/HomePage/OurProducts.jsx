@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import useAxios from "../../hooks/useAxios";
 import { Link } from "react-router";
+import Loader from "../Loader/Loader";
 
 const OurProducts = () => {
   const axiosInstance = useAxios();
@@ -23,20 +24,12 @@ const OurProducts = () => {
   });
 
   if (isPending) {
-    return (
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-cyan-500 border-solid"></div>
-          </div>
-        </div>
-      </section>
-    );
+    return <Loader></Loader>;
   }
 
   if (isError) {
     return (
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-red-600 text-lg font-semibold">
