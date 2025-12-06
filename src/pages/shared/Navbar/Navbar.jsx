@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaUserCircle, FaShoppingBag, FaSignOutAlt } from "react-icons/fa";
@@ -7,10 +7,15 @@ import { MdDashboard, MdHome, MdContactMail } from "react-icons/md";
 import { BiSolidShoppingBags } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
 import { IoPersonAddSharp } from "react-icons/io5";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn] = useState(false);
+  // const [user] = useState(false);
+  const { user, logOut } = useAuth();
+
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -23,6 +28,18 @@ const Navbar = () => {
     { label: "Contact", href: "/contact", icon: MdContactMail },
     { label: "Dashboard", href: "/dashboard", icon: MdDashboard },
   ];
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.success("Logout successful");
+        navigate("/");
+        window.location.reload();
+      })
+      .catch(() => {
+        toast.error("log out failed");
+      });
+  };
 
   return (
     <nav className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 shadow-2xl sticky top-0 z-50 max-w-7xl mx-auto rounded">
@@ -70,13 +87,16 @@ const Navbar = () => {
 
           {/* Right Side - Auth & User */}
           <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
-            {isLoggedIn ? (
+            {user ? (
               <>
                 <div className="flex items-center space-x-2 lg:space-x-3 pl-2 lg:pl-4 border-l border-gray-700">
                   <FaUserCircle className="text-cyan-400 text-xl md:text-2xl lg:text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
-                  <button className="hidden lg:flex items-center space-x-2 px-3 lg:px-4 py-1 lg:py-2 bg-red-600 hover:bg-red-700 text-white text-xs lg:text-sm rounded-lg font-medium transition-colors duration-300 transform hover:scale-105">
-                    <FaSignOutAlt className="text-sm lg:text-lg" />
-                    <span>Logout</span>
+                  <button
+                    onClick={handleLogOut}
+                    className="hidden md:flex items-center space-x-2 px-3 lg:px-4 py-1 lg:py-2 bg-red-600 hover:bg-red-700 text-white text-xs lg:text-sm rounded-lg font-medium transition-colors duration-300 transform hover:scale-105"
+                  >
+                    <FaSignOutAlt className="text-sm lg:text-lg " />
+                    <span className="md:hidden lg:flex">Logout</span>
                   </button>
                 </div>
               </>
@@ -102,7 +122,7 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2 sm:space-x-3">
-            {isLoggedIn ? (
+            {user ? (
               <FaUserCircle className="text-cyan-400 text-lg sm:text-2xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
             ) : null}
             <button
@@ -146,7 +166,7 @@ const Navbar = () => {
 
               {/* Mobile Auth Buttons */}
               <div className="pt-3 sm:pt-4 border-t border-gray-700 space-y-2">
-                {isLoggedIn ? (
+                {user ? (
                   <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm sm:text-base rounded-lg font-medium transition-colors duration-300">
                     <FaSignOutAlt className="text-base sm:text-lg" />
                     <span>Logout</span>

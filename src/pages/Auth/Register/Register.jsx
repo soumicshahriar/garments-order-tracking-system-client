@@ -4,9 +4,11 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
 
 // Register page: uses react-hook-form for validation and react-hot-toast for feedback
 const Register = () => {
+  const { createUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -14,8 +16,8 @@ const Register = () => {
     reset,
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const axios = useAxios();
+  //   const navigate = useNavigate();
+  //   const axios = useAxios();
 
   const onSubmit = async (data) => {
     // Ensure status default is 'pending'
@@ -27,8 +29,17 @@ const Register = () => {
       status: "pending",
     };
 
+    createUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+        toast.success("user created successful");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+        console.log(error.message);
+      });
+
     // add data to the firebase
-    
 
     // try {
     //   // Try to save the user to backend (if available)

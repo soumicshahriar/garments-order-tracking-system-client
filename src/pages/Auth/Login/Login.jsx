@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../hooks/useAuth";
 
 const Login = () => {
+  const { signInUser, googleSignIn } = useAuth();
   const {
     register,
     handleSubmit,
@@ -16,21 +18,41 @@ const Login = () => {
   const axios = useAxios();
 
   const onSubmit = async (data) => {
-    try {
-      const response = await axios.post("/login", {
-        email: data.email,
-        password: data.password,
+    signInUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
+        toast.success("Sign in Successful");
+      })
+      .catch((error) => {
+        toast.error("error.message");
       });
 
-      // Simulate successful login
-      toast.success("Login successful!");
-      navigate("/");
-    } catch (err) {
-      const message =
-        err?.response?.data?.message ||
-        "Invalid email or password. Please try again.";
-      toast.error(message);
-    }
+    // try {
+    //   const response = await axios.post("/login", {
+    //     email: data.email,
+    //     password: data.password,
+    //   });
+
+    //   // Simulate successful login
+    //   toast.success("Login successful!");
+    //   navigate("/");
+    // } catch (err) {
+    //   const message =
+    //     err?.response?.data?.message ||
+    //     "Invalid email or password. Please try again.";
+    //   toast.error(message);
+    // }
+  };
+
+  //   google sing in
+  const handleGoogleLogIn = () => {
+    googleSignIn()
+      .then(() => {
+        toast.success("Login Successfully");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   };
 
   return (
@@ -93,7 +115,7 @@ const Login = () => {
 
         <div className="flex items-center justify-between mt-4">
           <button
-            onClick={() => toast("Google login not implemented yet")}
+            onClick={handleGoogleLogIn}
             className="flex items-center justify-center w-full py-2 border border-gray-700 rounded-md text-gray-300 hover:bg-gray-800"
           >
             <img
