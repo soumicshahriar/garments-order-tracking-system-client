@@ -8,6 +8,9 @@ import Login from "../pages/Auth/Login/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import ManageUsers from "../pages/Dashboards/AdminDashBoard/ManageUsers/ManageUsers";
 import Products from "../pages/Dashboards/AdminDashBoard/Products/Products";
+import OrderForm from "../pages/AllProducts/OrderForm";
+import MyOrders from "../pages/Dashboards/BuyerDashBoard/MyOrders/MyOrders";
+import PaymentSuccess from "../pages/Dashboards/BuyerDashBoard/MyOrders/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +20,7 @@ export const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "all-products", Component: AllProducts },
       { path: "product-details/:id", Component: ProductDetails },
+      { path: "order-form/:id", Component: OrderForm },
       { path: "register", Component: Register },
       { path: "login", Component: Login },
     ],
@@ -25,8 +29,13 @@ export const router = createBrowserRouter([
     path: "dashboard",
     element: <DashboardLayout></DashboardLayout>,
     children: [
+      // admin route
       { path: "manage-users", Component: ManageUsers },
       { path: "all-products", Component: Products },
+
+      // buyer route
+      { path: "my-orders", Component: MyOrders },
+      { path: "payment-success", Component: PaymentSuccess },
     ],
   },
 ]);

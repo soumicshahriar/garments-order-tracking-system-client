@@ -1,17 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import useAxios from "../../hooks/useAxios";
 import "./ProductDetails.css";
+import useAuth from "../../hooks/useAuth";
 
 const ProductDetails = () => {
+  const { user } = useAuth();
+  console.log(user);
+
   const axiosInstance = useAxios();
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
 
+  // get user by email
+  const { data: userData = [] } = useQuery({
+    queryKey: ["users", user?.email],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/users?email=${user.email}`);
+      return res.data;
+    },
+  });
+  // console.log("user data", [userData]);
+  const userObj = userData[0] || {};
+
   const {
-    data: productsData = [],
+    data: product = [],
     isLoading,
     error,
   } = useQuery({
@@ -21,43 +36,37 @@ const ProductDetails = () => {
       return res.data;
     },
   });
-
-  // Extract the first product from the array
-  const product =
-    Array.isArray(productsData) && productsData.length > 0
-      ? productsData[0]
-      : {};
   console.log(product);
 
-  const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value);
-    if (value >= product.minimumOrder && value <= product.availableQuantity) {
-      setQuantity(value);
-    }
-  };
+  // const handleQuantityChange = (e) => {
+  //   const value = parseInt(e.target.value);
+  //   if (value >= product.minimumOrder && value <= product.availableQuantity) {
+  //     setQuantity(value);
+  //   }
+  // };
 
-  const handleIncrement = () => {
-    if (quantity < product.availableQuantity) {
-      setQuantity(quantity + 1);
-    }
-  };
+  // const handleIncrement = () => {
+  //   if (quantity < product.availableQuantity) {
+  //     setQuantity(quantity + 1);
+  //   }
+  // };
 
-  const handleDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
+  // const handleDecrement = () => {
+  //   if (quantity > 1) {
+  //     setQuantity(quantity - 1);
+  //   }
+  // };
 
-  const handleOrder = () => {
-    console.log("Order placed:", {
-      productId: product._id,
-      productName: product.title,
-      quantity,
-      totalPrice: product.price * quantity,
-    });
-    // TODO: Implement order booking functionality
-    alert(`Order placed for ${quantity} units of ${product?.title}`);
-  };
+  // const handleOrder = () => {
+  //   console.log("Order placed:", {
+  //     productId: product._id,
+  //     productName: product.title,
+  //     quantity,
+  //     totalPrice: product.price * quantity,
+  //   });
+  //   // TODO: Implement order booking functionality
+  //   alert(`Order placed for ${quantity} units of ${product?.title}`);
+  // };
 
   if (isLoading) {
     return <div className="loading">Loading product details...</div>;
@@ -155,7 +164,7 @@ const ProductDetails = () => {
           <div className="payment-options">
             <h3>Payment Options</h3>
             <ul className="payment-list">
-              {product.paymentOptions.map((option, index) => (
+              {product?.paymentOptions.map((option, index) => (
                 <li key={index}>{option}</li>
               ))}
             </ul>
@@ -163,14 +172,14 @@ const ProductDetails = () => {
         )}
 
         {/* Quantity Selector */}
-        <div className="quantity-section">
+        {/* <div className="quantity-section">
           <label htmlFor="quantity" className="quantity-label">
             Select Quantity:
           </label>
           <div className="quantity-controls">
             <button
               className="qty-btn"
-              onClick={handleDecrement}
+              // onClick={handleDecrement}
               disabled={quantity <= 1}
             >
               −
@@ -179,14 +188,14 @@ const ProductDetails = () => {
               id="quantity"
               type="number"
               value={quantity}
-              onChange={handleQuantityChange}
+              // onChange={handleQuantityChange}
               min={product.minimumOrder}
               max={product.availableQuantity}
               className="quantity-input "
             />
             <button
               className="qty-btn"
-              onClick={handleIncrement}
+              // onClick={handleIncrement}
               disabled={quantity >= product.availableQuantity}
             >
               +
@@ -196,22 +205,25 @@ const ProductDetails = () => {
             (Min: {product.minimumOrderQuantity} | Max:{" "}
             {product.availableQuantity})
           </p>
-        </div>
+        </div> */}
 
         {/* Total Price */}
-        <div className="total-price">
+        {/* <div className="total-price">
           <span>Total Price:</span>
           <span className="price-value">${product.price * quantity}</span>
-        </div>
+        </div> */}
 
         {/* Order Button */}
-        <button
-          className="order-button"
-          onClick={handleOrder}
-          disabled={product.availableQuantity < product.minimumOrderQuantity}
-        >
-          Place Order
-        </button>
+        {userObj?.role === "buyer" && (
+          <Link
+            to={`/order-form/${product._id}`}
+            className="order-button text-center"
+            // onClick={handleOrder}
+            disabled={product.availableQuantity < product.minimumOrderQuantity}
+          >
+            Order Now
+          </Link>
+        )}
 
         {product.availableQuantity < product.minimumOrderQuantity && (
           <p className="out-of-stock">Out of Stock</p>

@@ -211,7 +211,11 @@ const AllProducts = () => {
                 {filteredProducts.map((product) => (
                   <div
                     key={product._id || product.id}
-                    className="group relative bg-linear-to-br from-gray-800 to-gray-900 rounded-lg overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-300 border border-gray-700 hover:border-cyan-500/50 transform hover:-translate-y-2"
+                    className="group relative bg-linear-to-br from-gray-800 to-gray-900 
+                    rounded-lg overflow-hidden shadow-xl hover:shadow-2xl 
+                    hover:shadow-cyan-500/30 transition-all duration-300 
+                    border border-gray-700 hover:border-cyan-500/50 
+                    transform hover:-translate-y-2 flex flex-col"
                   >
                     {/* Gradient overlay on hover */}
                     <div className="absolute inset-0 bg-linear-to-t from-cyan-500/0 to-transparent group-hover:from-cyan-500/20 transition-all duration-300 z-10 pointer-events-none"></div>
@@ -236,14 +240,14 @@ const AllProducts = () => {
 
                       {/* Stock Badge */}
                       {product.quantity > 0 && (
-                        <div className="absolute bottom-4 left-4 px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg">
+                        <div className="absolute bottom-4 left-4 px-3 py-1 bg-linear-to-r from-green-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg">
                           {product.quantity} In Stock
                         </div>
                       )}
                     </div>
 
                     {/* Product Info */}
-                    <div className="p-4 sm:p-5 relative z-20">
+                    <div className="p-4 sm:p-5 relative z-20 flex flex-col flex-1">
                       {/* Category */}
                       {product.category && (
                         <p className="text-xs font-semibold text-cyan-400 uppercase tracking-wide mb-2">
@@ -252,7 +256,7 @@ const AllProducts = () => {
                       )}
 
                       {/* Product Name */}
-                      <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 line-clamp-2">
                         {product.name || product.title || "Product"}
                       </h3>
 
@@ -275,9 +279,9 @@ const AllProducts = () => {
                       )}
 
                       {/* Price */}
-                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 mb-4">
                         <div>
-                          <p className="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400">
+                          <p className="md:text-lg sm:text-base font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400">
                             ${(product.price || 0).toFixed(2)}
                           </p>
                           {product.originalPrice && (
@@ -287,7 +291,7 @@ const AllProducts = () => {
                           )}
                         </div>
                         <div className="text-right">
-                          {product.quantity > 0 ? (
+                          {product?.availableQuantity > 0 ? (
                             <p className="text-xs font-semibold text-green-400">
                               In Stock
                             </p>
@@ -302,7 +306,7 @@ const AllProducts = () => {
                       {/* View Details Button */}
                       <Link
                         to={`/product-details/${product._id}`}
-                        className="w-full mt-4 px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center space-x-2 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full mt-auto px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center space-x-2 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={product.quantity === 0}
                       >
                         <FaShoppingCart className="text-lg" />

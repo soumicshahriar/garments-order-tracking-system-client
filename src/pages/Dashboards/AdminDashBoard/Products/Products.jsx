@@ -170,7 +170,7 @@ const Products = () => {
                   price: Number(form.price.value),
                   category: form.category.value,
                   demoVideo: form.demoVideo.value,
-                  paymentOptions: form.paymentOptions.value,
+                  paymentOptions: [form.paymentOptions.value],
                 };
 
                 try {
@@ -208,7 +208,7 @@ const Products = () => {
               <input
                 name="price"
                 type="number"
-                 step="0.01"
+                step="0.01"
                 defaultValue={selectedProduct.price}
                 className="input input-bordered w-full bg-gray-800 mb-3"
               />
@@ -231,11 +231,14 @@ const Products = () => {
 
               {/* Payment Options */}
               <label className="block mb-1">Payment Options</label>
-              <input
+              <select
                 name="paymentOptions"
-                defaultValue={selectedProduct.paymentOptions}
-                className="input input-bordered w-full bg-gray-800 mb-4"
-              />
+                defaultValue={selectedProduct.paymentOptions[0]}
+                className="select select-bordered w-full bg-gray-800 mb-4"
+              >
+                <option value="PayFast">PayFast</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+              </select>
 
               <div className="modal-action flex justify-end gap-3">
                 <button
