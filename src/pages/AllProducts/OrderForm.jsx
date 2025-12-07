@@ -71,7 +71,7 @@ const OrderForm = () => {
       quantity,
       totalPrice,
       buyerEmail: user?.email,
-      paymentMethod: product.paymentOptions[0],
+      paymentMethod: product.paymentOption[0],
       productId: product._id,
       productTitle: product.title,
     };

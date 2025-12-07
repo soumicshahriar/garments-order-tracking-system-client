@@ -160,11 +160,11 @@ const ProductDetails = () => {
         </div>
 
         {/* Payment Options */}
-        {product.paymentOptions && product.paymentOptions.length > 0 && (
+        {product.paymentOption && product.paymentOption.length > 0 && (
           <div className="payment-options">
             <h3>Payment Options</h3>
             <ul className="payment-list">
-              {product?.paymentOptions.map((option, index) => (
+              {product?.paymentOption.map((option, index) => (
                 <li key={index}>{option}</li>
               ))}
             </ul>

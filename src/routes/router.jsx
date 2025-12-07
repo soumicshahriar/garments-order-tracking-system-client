@@ -13,6 +13,7 @@ import MyOrders from "../pages/Dashboards/BuyerDashBoard/MyOrders/MyOrders";
 import PaymentSuccess from "../pages/Dashboards/BuyerDashBoard/MyOrders/PaymentSuccess";
 import AllOrders from "../pages/Dashboards/AdminDashBoard/AllOrders/AllOrders";
 import AddProduct from "../pages/Dashboards/ManagerDashBoard/AddProduct/AddProduct";
+import ManageProducts from "../pages/Dashboards/ManagerDashBoard/ManageProducts/ManageProducts";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ export const router = createBrowserRouter([
 
       // manager dashboard
       { path: "add-product", Component: AddProduct },
+      { path: "manage-products", Component: ManageProducts },
 
       // buyer route
       { path: "my-orders", Component: MyOrders },

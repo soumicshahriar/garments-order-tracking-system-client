@@ -14,9 +14,9 @@ const categories = [
   "Hoodie",
   "Shorts",
   "Leggings",
-  ""
+  "",
 ];
-const paymentOptions = ["Cash on Delivery", "PayFast"];
+const paymentOption = ["Cash on Delivery", "PayFast"];
 
 const AddProduct = () => {
   const axiosInstance = useAxios();
@@ -90,7 +90,7 @@ const AddProduct = () => {
         minimumOrderQuantity: Number(data.minimumOrderQuantity),
         images: uploadedImageURLs, // multiple URLs
         demoVideo: data.demoVideo || "",
-        paymentOptions: data.paymentOption,
+        paymentOption: data.paymentOption,
         showOnHome: data.showOnHome || false,
 
         managerInfo: {
@@ -192,7 +192,7 @@ const AddProduct = () => {
             className="w-full p-3 rounded bg-gray-800 text-white"
           >
             <option value="">Select Payment Option</option>
-            {paymentOptions.map((p) => (
+            {paymentOption.map((p) => (
               <option key={p}>{p}</option>
             ))}
           </select>
