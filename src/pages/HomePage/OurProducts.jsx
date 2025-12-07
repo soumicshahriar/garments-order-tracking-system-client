@@ -28,6 +28,7 @@ const OurProducts = () => {
   if (isPending) {
     return <Loader></Loader>;
   }
+  console.log(products);
 
   if (isError) {
     return (
@@ -48,10 +49,6 @@ const OurProducts = () => {
 
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden ">
-      {/* Decorative gradient background elements */}
-      {/* <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div> */}
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -80,9 +77,7 @@ const OurProducts = () => {
                 <div className="relative overflow-hidden bg-gray-700 h-56 sm:h-64 md:h-72">
                   <img
                     src={
-                      product.image ||
-                      product.imageUrl ||
-                      product.img ||
+                      product.images[0] ||
                       "https://via.placeholder.com/300x400?text=No+Image"
                     }
                     alt={product.name || product.title || "Product"}
@@ -105,14 +100,11 @@ const OurProducts = () => {
                 {/* Product Info */}
                 <div className="p-4 sm:p-5 relative z-20 flex flex-col flex-1">
                   <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 line-clamp-2">
-                    {product.name || product.title || "Product"}
+                    {product.title || "Product"}
                   </h3>
 
                   <p className="text-gray-400 text-xs sm:text-sm mt-2 line-clamp-2">
-                    {product.description ||
-                      product.shortDescription ||
-                      product.short_desc ||
-                      "High-quality garment"}
+                    {product.description || "High-quality garment"}
                   </p>
 
                   {/* Rating (if available) */}

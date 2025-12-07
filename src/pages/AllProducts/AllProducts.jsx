@@ -98,9 +98,7 @@ const AllProducts = () => {
 
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 min-h-screen relative overflow-hidden">
-      {/* Decorative elements */}
-      {/* <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div> */}
+     
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header */}
@@ -224,9 +222,7 @@ const AllProducts = () => {
                     <div className="relative overflow-hidden bg-gray-700 h-56 sm:h-64 md:h-72">
                       <img
                         src={
-                          product.image ||
-                          product.imageUrl ||
-                          product.img ||
+                          product.images[0] ||
                           "https://via.placeholder.com/300x400?text=No+Image"
                         }
                         alt={product.name || product.title || "Product"}

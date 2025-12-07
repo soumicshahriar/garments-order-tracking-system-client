@@ -2,6 +2,7 @@ import { MdInventory, MdManageAccounts } from "react-icons/md";
 import { Link, Outlet } from "react-router";
 import { HiOutlineCheckCircle, HiOutlineShoppingBag } from "react-icons/hi";
 import { AiOutlineOrderedList } from "react-icons/ai";
+import { FiPlusSquare } from "react-icons/fi";
 
 const DashboardLayout = () => {
   return (
@@ -76,7 +77,7 @@ const DashboardLayout = () => {
               </li>
 
               {/* admin route */}
-              {/* manage usres */}
+              {/* manage users */}
               <li>
                 <Link
                   to={"/dashboard/manage-users"}
@@ -109,6 +110,19 @@ const DashboardLayout = () => {
                 >
                   <AiOutlineOrderedList className="text-cyan-400" size={20} />
                   <span className="is-drawer-close:hidden">All Orders</span>
+                </Link>
+              </li>
+
+              {/* Manager route */}
+              {/* add product */}
+              <li>
+                <Link
+                  to={"/dashboard/add-product"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Add Product"
+                >
+                  <FiPlusSquare className="text-cyan-400" size={20} />
+                  <span className="is-drawer-close:hidden">Add Product</span>
                 </Link>
               </li>
 
