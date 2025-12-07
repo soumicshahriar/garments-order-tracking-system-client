@@ -11,6 +11,7 @@ import Products from "../pages/Dashboards/AdminDashBoard/Products/Products";
 import OrderForm from "../pages/AllProducts/OrderForm";
 import MyOrders from "../pages/Dashboards/BuyerDashBoard/MyOrders/MyOrders";
 import PaymentSuccess from "../pages/Dashboards/BuyerDashBoard/MyOrders/PaymentSuccess";
+import AllOrders from "../pages/Dashboards/AdminDashBoard/AllOrders/AllOrders";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
       // admin route
       { path: "manage-users", Component: ManageUsers },
       { path: "all-products", Component: Products },
+      { path: "all-orders", Component: AllOrders },
 
       // buyer route
       { path: "my-orders", Component: MyOrders },

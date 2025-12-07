@@ -1,6 +1,7 @@
 import { MdInventory, MdManageAccounts } from "react-icons/md";
 import { Link, Outlet } from "react-router";
 import { HiOutlineCheckCircle, HiOutlineShoppingBag } from "react-icons/hi";
+import { AiOutlineOrderedList } from "react-icons/ai";
 
 const DashboardLayout = () => {
   return (
@@ -96,6 +97,18 @@ const DashboardLayout = () => {
                 >
                   <MdInventory className="text-cyan-400" size={20} />
                   <span className="is-drawer-close:hidden">All Products</span>
+                </Link>
+              </li>
+
+              {/* all Orders */}
+              <li>
+                <Link
+                  to={"/dashboard/all-orders"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="All Orders"
+                >
+                  <AiOutlineOrderedList className="text-cyan-400" size={20} />
+                  <span className="is-drawer-close:hidden">All Orders</span>
                 </Link>
               </li>
 
