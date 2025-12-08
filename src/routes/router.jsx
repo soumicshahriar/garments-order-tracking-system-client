@@ -16,6 +16,7 @@ import AddProduct from "../pages/Dashboards/ManagerDashBoard/AddProduct/AddProdu
 import ManageProducts from "../pages/Dashboards/ManagerDashBoard/ManageProducts/ManageProducts";
 import PendingOrders from "../pages/Dashboards/ManagerDashBoard/PendingOrders/PendingOrders";
 import ApproveOrders from "../pages/Dashboards/ManagerDashBoard/ApproveOrders/ApproveOrders";
+import TrackOrders from "../pages/Dashboards/BuyerDashBoard/TrackOrders/TrackOrders";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
 
       // buyer route
       { path: "my-orders", Component: MyOrders },
+      { path: "track-order/:orderId", Component: TrackOrders },
       { path: "payment-success", Component: PaymentSuccess },
     ],
   },

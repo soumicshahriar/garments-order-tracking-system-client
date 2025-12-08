@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useAuth from "../../../../hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxios from "../../../../hooks/useAxios";
+import { Link } from "react-router";
 
 const MyOrders = () => {
   const { user } = useAuth();
@@ -60,14 +61,12 @@ const MyOrders = () => {
 
                 <td className="border p-2 space-x-2">
                   {/* View Button */}
-                  <button
-                    onClick={() =>
-                      console.log("Open order details:", order._id)
-                    }
+                  <Link
+                    to={`/dashboard/track-order/${order._id}`}
                     className="px-3 py-1 bg-blue-500 text-white rounded"
                   >
                     View
-                  </button>
+                  </Link>
 
                   {/* Cancel Button */}
                   {order.status === "pending" && (
@@ -83,6 +82,14 @@ const MyOrders = () => {
                 </td>
               </tr>
             ))}
+
+            {myOrders.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center p-4 text-gray-500">
+                  No orders found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -240,6 +240,14 @@ const ManageUsers = () => {
                 </td>
               </tr>
             ))}
+
+            {filteredUser.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center p-4 text-gray-500">
+                  No Users found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

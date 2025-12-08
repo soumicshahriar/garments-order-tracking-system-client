@@ -1,6 +1,10 @@
 import { MdInventory, MdManageAccounts } from "react-icons/md";
 import { Link, Outlet } from "react-router";
-import { HiOutlineCheckCircle, HiOutlineShoppingBag } from "react-icons/hi";
+import {
+  HiOutlineCheckCircle,
+  HiOutlineLocationMarker,
+  HiOutlineShoppingBag,
+} from "react-icons/hi";
 import { AiOutlineOrderedList } from "react-icons/ai";
 import {
   FiCheckCircle,
@@ -180,6 +184,22 @@ const DashboardLayout = () => {
                   <span className="is-drawer-close:hidden">My Orders</span>
                 </Link>
               </li>
+
+              {/* Track orders */}
+              <li>
+                <Link
+                  to={"/dashboard/track-order/:orderId"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Track Order"
+                >
+                  <HiOutlineLocationMarker
+                    className="text-blue-400"
+                    size={20}
+                  />
+                  <span className="is-drawer-close:hidden">Track Order</span>
+                </Link>
+              </li>
+
               {/* payment success */}
               <li>
                 <Link

@@ -4,6 +4,17 @@ import useAxios from "../../../../hooks/useAxios";
 import Swal from "sweetalert2";
 import { motion } from "motion/react";
 
+// FIXED ORDER OF TRACKING STEPS
+const TRACKING_STEPS = [
+  "Cutting Completed",
+  "Sewing Started",
+  "Finishing",
+  "QC Checked",
+  "Packed",
+  "Shipped",
+  "Out for Delivery",
+];
+
 const ApproveOrders = () => {
   const axiosInstance = useAxios();
 
@@ -12,8 +23,25 @@ const ApproveOrders = () => {
 
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [trackingList, setTrackingList] = useState([]);
+  const [nextExpectedStep, setNextExpectedStep] = useState("");
 
-  // FETCH APPROVED ORDERS
+  // Determine next step based on last tracking
+  const getNextStep = (trackingData) => {
+    if (!trackingData || trackingData.length === 0) {
+      return TRACKING_STEPS[0];
+    }
+
+    const lastStep = trackingData[trackingData.length - 1].status;
+    const lastIndex = TRACKING_STEPS.indexOf(lastStep);
+
+    if (lastIndex === TRACKING_STEPS.length - 1) {
+      return null; // Fully completed
+    }
+
+    return TRACKING_STEPS[lastIndex + 1];
+  };
+
+  // Fetch approved orders
   const {
     data: approvedOrders = [],
     isPending,
@@ -28,7 +56,7 @@ const ApproveOrders = () => {
     },
   });
 
-  // --- ADD TRACKING MUTATION ---
+  // Add tracking mutation
   const addTrackingMutation = useMutation({
     mutationFn: async ({ orderId, tracking }) =>
       axiosInstance.post(`/tracking/${orderId}`, tracking),
@@ -42,10 +70,11 @@ const ApproveOrders = () => {
         color: "#fff",
       });
       addTrackingModalRef.current.close();
+      refetch();
     },
   });
 
-  // --- FETCH TRACKING FOR VIEW MODAL ---
+  // View timeline
   const handleViewTracking = async (order) => {
     setSelectedOrder(order);
     const res = await axiosInstance.get(`/tracking/${order._id}`);
@@ -53,9 +82,26 @@ const ApproveOrders = () => {
     viewTrackingModalRef.current.showModal();
   };
 
-  // --- OPEN ADD TRACKING MODAL ---
-  const handleAddTracking = (order) => {
+  // Open Add Tracking but prevent wrong steps
+  const handleAddTracking = async (order) => {
     setSelectedOrder(order);
+
+    const res = await axiosInstance.get(`/tracking/${order._id}`);
+    setTrackingList(res.data);
+
+    const nextStep = getNextStep(res.data);
+
+    if (!nextStep) {
+      // Tracking completed
+      Swal.fire({
+        icon: "info",
+        title: "Tracking Completed",
+        text: "This order has reached the final stage (Out for Delivery).",
+      });
+      return;
+    }
+
+    setNextExpectedStep(nextStep);
     addTrackingModalRef.current.showModal();
   };
 
@@ -111,13 +157,21 @@ const ApproveOrders = () => {
                 </td>
               </tr>
             ))}
+
+            {approvedOrders.length === 0 && (
+              <tr>
+                <td colSpan="6" className="text-center p-4 text-gray-500">
+                  No Approved orders found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
       {/* ADD TRACKING MODAL */}
       <dialog ref={addTrackingModalRef} className="modal">
-        <div className="modal-box bg-gradient-to-br from-gray-900 to-gray-700 text-white">
+        <div className="modal-box bg-linear-to-br from-gray-900 to-gray-700 text-white">
           <h3 className="text-lg font-bold mb-3">Add Tracking</h3>
 
           <form
@@ -127,7 +181,7 @@ const ApproveOrders = () => {
               const tracking = {
                 location: e.target.location.value,
                 note: e.target.note.value,
-                status: e.target.status.value,
+                status: nextExpectedStep,
                 time: new Date(),
               };
 
@@ -152,19 +206,13 @@ const ApproveOrders = () => {
               className="textarea textarea-bordered w-full"
             ></textarea>
 
-            <select
+            {/* FIXED NEXT STEP */}
+            <input
               name="status"
-              required
-              className="select select-bordered w-full"
-            >
-              <option>Cutting Completed</option>
-              <option>Sewing Started</option>
-              <option>Finishing</option>
-              <option>QC Checked</option>
-              <option>Packed</option>
-              <option>Shipped</option>
-              <option>Out for Delivery</option>
-            </select>
+              readOnly
+              className="input input-bordered w-full bg-gray-700 text-white"
+              value={nextExpectedStep}
+            />
 
             <button className="btn bg-purple-600 text-white w-full">
               Submit
@@ -182,8 +230,7 @@ const ApproveOrders = () => {
         </div>
       </dialog>
 
-      {/* VIEW TRACKING TIMELINE MODAL */}
-      {/* VIEW TRACKING TIMELINE MODAL */}
+      {/* VIEW TRACKING MODAL */}
       <dialog ref={viewTrackingModalRef} className="modal">
         <div className="modal-box bg-gray-900 text-white max-h-[80vh] overflow-y-auto">
           <h3 className="text-lg font-bold mb-4">
@@ -191,8 +238,7 @@ const ApproveOrders = () => {
           </h3>
 
           <div className="space-y-6 relative">
-            {/* Vertical Line */}
-            <div className="absolute left-4 top-0 w-1 h-full bg-linear-to-b from-blue-500 to-purple-500 opacity-40 rounded-full"></div>
+            <div className="absolute left-4 top-0 w-1 h-full bg-blue-500 opacity-40 rounded-full"></div>
 
             {trackingList.length === 0 && (
               <p className="text-gray-400 text-center">No tracking yet</p>
@@ -207,7 +253,6 @@ const ApproveOrders = () => {
                 whileHover={{ scale: 1.02 }}
                 className="relative pl-10"
               >
-                {/* Timeline Dot */}
                 <motion.div
                   className="w-4 h-4 rounded-full bg-blue-500 shadow-lg absolute left-2 top-1"
                   initial={{ scale: 0 }}
@@ -219,7 +264,6 @@ const ApproveOrders = () => {
                   }}
                 ></motion.div>
 
-                {/* Content Card */}
                 <motion.div
                   className="bg-gray-800 p-4 rounded-lg shadow-md border border-gray-700"
                   whileHover={{

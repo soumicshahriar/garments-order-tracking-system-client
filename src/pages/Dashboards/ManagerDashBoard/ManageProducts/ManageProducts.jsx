@@ -172,7 +172,7 @@ const ManageProducts = () => {
                             }
                           })
                         }
-                        className="btn btn-sm bg-gradient-to-r from-red-700 to-red-900 text-white"
+                        className="btn btn-sm bg-linear-to-r from-red-700 to-red-900 text-white"
                       >
                         Delete
                       </button>
