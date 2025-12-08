@@ -119,6 +119,7 @@ const ManageProducts = () => {
               <th>Image</th>
               <th>Name</th>
               <th>Price</th>
+              <th>Available Quantity</th>
               <th>Payment Mode</th>
               <th>Actions</th>
             </tr>
@@ -133,7 +134,7 @@ const ManageProducts = () => {
               </tr>
             ) : (
               filteredProducts.map((product) => (
-                <tr key={product._id} className="hover:bg-gray-800">
+                <tr key={product._id} className="hover:bg-gray-800 ">
                   <td>
                     <img
                       src={product.images?.[0]}
@@ -143,6 +144,7 @@ const ManageProducts = () => {
                   </td>
                   <td>{product.title}</td>
                   <td>${product.price}</td>
+                  <td>${product.availableQuantity}</td>
                   <td>{product.paymentOption}</td>
                   <td>
                     <div className="flex gap-3">

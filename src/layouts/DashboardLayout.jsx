@@ -2,7 +2,6 @@ import { MdInventory, MdManageAccounts } from "react-icons/md";
 import { Link, Outlet } from "react-router";
 import {
   HiOutlineCheckCircle,
-  HiOutlineLocationMarker,
   HiOutlineShoppingBag,
   HiOutlineUser,
 } from "react-icons/hi";
@@ -13,8 +12,11 @@ import {
   FiPackage,
   FiPlusSquare,
 } from "react-icons/fi";
+import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
+  const { role } = useRole();
+  // console.log(role);
   return (
     <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900  min-h-screen">
       <div className="drawer lg:drawer-open">
@@ -85,120 +87,149 @@ const DashboardLayout = () => {
                   <span className="is-drawer-close:hidden">Homepage</span>
                 </Link>
               </li>
-
               {/* admin route */}
-              {/* manage users */}
-              <li>
-                <Link
-                  to={"/dashboard/manage-users"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Manage Users"
-                >
-                  <MdManageAccounts className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">Manage Users</span>
-                </Link>
-              </li>
+              {role === "admin" && (
+                <>
+                  {/* manage users */}
+                  <li>
+                    <Link
+                      to={"/dashboard/manage-users"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="Manage Users"
+                    >
+                      <MdManageAccounts className="text-cyan-400" size={20} />
+                      <span className="is-drawer-close:hidden">
+                        Manage Users
+                      </span>
+                    </Link>
+                  </li>
 
-              {/* all products */}
-              <li>
-                <Link
-                  to={"/dashboard/all-products"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="All Products"
-                >
-                  <MdInventory className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">All Products</span>
-                </Link>
-              </li>
+                  {/* all products */}
+                  <li>
+                    <Link
+                      to={"/dashboard/all-products"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="All Products"
+                    >
+                      <MdInventory className="text-cyan-400" size={20} />
+                      <span className="is-drawer-close:hidden">
+                        All Products
+                      </span>
+                    </Link>
+                  </li>
 
-              {/* all Orders */}
-              <li>
-                <Link
-                  to={"/dashboard/all-orders"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="All Orders"
-                >
-                  <AiOutlineOrderedList className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">All Orders</span>
-                </Link>
-              </li>
+                  {/* all Orders */}
+                  <li>
+                    <Link
+                      to={"/dashboard/all-orders"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="All Orders"
+                    >
+                      <AiOutlineOrderedList
+                        className="text-cyan-400"
+                        size={20}
+                      />
+                      <span className="is-drawer-close:hidden">All Orders</span>
+                    </Link>
+                  </li>
+                </>
+              )}
 
               {/* Manager route */}
-              {/* add product */}
-              <li>
-                <Link
-                  to={"/dashboard/add-product"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Add Product"
-                >
-                  <FiPlusSquare className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">Add Product</span>
-                </Link>
-              </li>
-              {/* manage products */}
-              <li>
-                <Link
-                  to={"/dashboard/manage-products"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Manage Products"
-                >
-                  <FiPackage className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">
-                    Manage Products
-                  </span>
-                </Link>
-              </li>
-              {/* Pending Orders */}
-              <li>
-                <Link
-                  to={"/dashboard/pending-orders"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Pending Orders"
-                >
-                  <FiClock className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">Pending Orders</span>
-                </Link>
-              </li>
-              {/* approved Orders */}
-              <li>
-                <Link
-                  to={"/dashboard/approved-orders"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Approved Orders"
-                >
-                  <FiCheckCircle className="text-green-400" size={20} />
-                  <span className="is-drawer-close:hidden">
-                    Approved Orders
-                  </span>
-                </Link>
-              </li>
+
+              {role === "manager" && (
+                <>
+                  {/* add product */}
+                  <li>
+                    <Link
+                      to={"/dashboard/add-product"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="Add Product"
+                    >
+                      <FiPlusSquare className="text-cyan-400" size={20} />
+                      <span className="is-drawer-close:hidden">
+                        Add Product
+                      </span>
+                    </Link>
+                  </li>
+                  {/* manage products */}
+                  <li>
+                    <Link
+                      to={"/dashboard/manage-products"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="Manage Products"
+                    >
+                      <FiPackage className="text-cyan-400" size={20} />
+                      <span className="is-drawer-close:hidden">
+                        Manage Products
+                      </span>
+                    </Link>
+                  </li>
+                  {/* Pending Orders */}
+                  <li>
+                    <Link
+                      to={"/dashboard/pending-orders"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="Pending Orders"
+                    >
+                      <FiClock className="text-cyan-400" size={20} />
+                      <span className="is-drawer-close:hidden">
+                        Pending Orders
+                      </span>
+                    </Link>
+                  </li>
+                  {/* approved Orders */}
+                  <li>
+                    <Link
+                      to={"/dashboard/approved-orders"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="Approved Orders"
+                    >
+                      <FiCheckCircle className="text-green-400" size={20} />
+                      <span className="is-drawer-close:hidden">
+                        Approved Orders
+                      </span>
+                    </Link>
+                  </li>
+                </>
+              )}
 
               {/* buyer route */}
-              {/* my orders */}
-              <li>
-                <Link
-                  to={"/dashboard/my-orders"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="My Orders"
-                >
-                  <HiOutlineShoppingBag className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">My Orders</span>
-                </Link>
-              </li>
+              {role === "buyer" && (
+                <>
+                  {/* my orders */}
+                  <li>
+                    <Link
+                      to={"/dashboard/my-orders"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="My Orders"
+                    >
+                      <HiOutlineShoppingBag
+                        className="text-cyan-400"
+                        size={20}
+                      />
+                      <span className="is-drawer-close:hidden">My Orders</span>
+                    </Link>
+                  </li>
 
-              {/* payment success */}
-              <li>
-                <Link
-                  to={"/dashboard/payment-success"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Payment Success"
-                >
-                  <HiOutlineCheckCircle className="text-cyan-400" size={20} />
-                  <span className="is-drawer-close:hidden">
-                    Payment Success
-                  </span>
-                </Link>
-              </li>
+                  {/* payment success */}
+                  <li>
+                    <Link
+                      to={"/dashboard/payment-success"}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                      data-tip="Payment Success"
+                    >
+                      <HiOutlineCheckCircle
+                        className="text-cyan-400"
+                        size={20}
+                      />
+                      <span className="is-drawer-close:hidden">
+                        Payment Success
+                      </span>
+                    </Link>
+                  </li>
+                </>
+              )}
 
               {/* profile */}
               <li>

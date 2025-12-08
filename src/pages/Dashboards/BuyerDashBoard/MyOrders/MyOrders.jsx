@@ -34,7 +34,9 @@ const MyOrders = () => {
 
   return (
     <div className="p-5">
-      <h2 className="text-2xl font-semibold mb-4">My Orders</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        My Orders : ({myOrders.length})
+      </h2>
 
       {/* Table */}
       <div className="overflow-x-auto shadow rounded-lg">

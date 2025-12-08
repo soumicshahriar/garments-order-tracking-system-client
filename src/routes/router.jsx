@@ -19,6 +19,7 @@ import ApproveOrders from "../pages/Dashboards/ManagerDashBoard/ApproveOrders/Ap
 import TrackOrders from "../pages/Dashboards/BuyerDashBoard/TrackOrders/TrackOrders";
 import OrderDetails from "../pages/Dashboards/AdminDashBoard/OrderDetails/OrderDetails";
 import MyProfile from "../pages/Dashboards/MyProfile/MyProfile";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -35,9 +36,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <DashboardLayout></DashboardLayout>,
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
     children: [
       // admin route
+      
       { path: "manage-users", Component: ManageUsers },
       { path: "all-products", Component: Products },
       { path: "all-orders", Component: AllOrders },

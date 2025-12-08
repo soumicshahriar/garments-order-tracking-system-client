@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useAxios from "../../../hooks/useAxios";
@@ -15,12 +15,15 @@ const Login = () => {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = location.state?.from || "/";
   const axiosInstance = useAxios();
 
   const onSubmit = async (data) => {
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
+        navigate(redirectPath, { replace: true });
         toast.success("Sign in Successful");
       })
       .catch((error) => {
@@ -62,6 +65,7 @@ const Login = () => {
       const response = await axiosInstance.post("/users", payload);
 
       if (response.data) {
+        navigate(redirectPath, { replace: true });
         toast.success("Login successful!");
       } else {
         toast.error("Something went wrong while creating user.");
