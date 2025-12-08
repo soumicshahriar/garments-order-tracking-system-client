@@ -2,7 +2,12 @@ import { MdInventory, MdManageAccounts } from "react-icons/md";
 import { Link, Outlet } from "react-router";
 import { HiOutlineCheckCircle, HiOutlineShoppingBag } from "react-icons/hi";
 import { AiOutlineOrderedList } from "react-icons/ai";
-import { FiPackage, FiPlusSquare } from "react-icons/fi";
+import {
+  FiCheckCircle,
+  FiClock,
+  FiPackage,
+  FiPlusSquare,
+} from "react-icons/fi";
 
 const DashboardLayout = () => {
   return (
@@ -135,6 +140,30 @@ const DashboardLayout = () => {
                   <FiPackage className="text-cyan-400" size={20} />
                   <span className="is-drawer-close:hidden">
                     Manage Products
+                  </span>
+                </Link>
+              </li>
+              {/* Pending Orders */}
+              <li>
+                <Link
+                  to={"/dashboard/pending-orders"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Pending Orders"
+                >
+                  <FiClock className="text-cyan-400" size={20} />
+                  <span className="is-drawer-close:hidden">Pending Orders</span>
+                </Link>
+              </li>
+              {/* approved Orders */}
+              <li>
+                <Link
+                  to={"/dashboard/approved-orders"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Approved Orders"
+                >
+                  <FiCheckCircle className="text-green-400" size={20} />
+                  <span className="is-drawer-close:hidden">
+                    Approved Orders
                   </span>
                 </Link>
               </li>

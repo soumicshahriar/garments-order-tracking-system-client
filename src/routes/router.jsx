@@ -14,6 +14,8 @@ import PaymentSuccess from "../pages/Dashboards/BuyerDashBoard/MyOrders/PaymentS
 import AllOrders from "../pages/Dashboards/AdminDashBoard/AllOrders/AllOrders";
 import AddProduct from "../pages/Dashboards/ManagerDashBoard/AddProduct/AddProduct";
 import ManageProducts from "../pages/Dashboards/ManagerDashBoard/ManageProducts/ManageProducts";
+import PendingOrders from "../pages/Dashboards/ManagerDashBoard/PendingOrders/PendingOrders";
+import ApproveOrders from "../pages/Dashboards/ManagerDashBoard/ApproveOrders/ApproveOrders";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +42,8 @@ export const router = createBrowserRouter([
       // manager dashboard
       { path: "add-product", Component: AddProduct },
       { path: "manage-products", Component: ManageProducts },
+      { path: "pending-orders", Component: PendingOrders },
+      { path: "approved-orders", Component: ApproveOrders },
 
       // buyer route
       { path: "my-orders", Component: MyOrders },
