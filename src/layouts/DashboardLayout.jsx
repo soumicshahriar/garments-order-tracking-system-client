@@ -4,6 +4,7 @@ import {
   HiOutlineCheckCircle,
   HiOutlineLocationMarker,
   HiOutlineShoppingBag,
+  HiOutlineUser,
 } from "react-icons/hi";
 import { AiOutlineOrderedList } from "react-icons/ai";
 import {
@@ -122,18 +123,6 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* Order Details */}
-              <li>
-                <Link
-                  to={"/dashboard/order-details/:orderId"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Order Details"
-                >
-                  <FiPackage className="text-blue-400" size={20} />
-                  <span className="is-drawer-close:hidden">Order Details</span>
-                </Link>
-              </li>
-
               {/* Manager route */}
               {/* add product */}
               <li>
@@ -197,21 +186,6 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* Track orders */}
-              <li>
-                <Link
-                  to={"/dashboard/track-order/:orderId"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Track Order"
-                >
-                  <HiOutlineLocationMarker
-                    className="text-blue-400"
-                    size={20}
-                  />
-                  <span className="is-drawer-close:hidden">Track Order</span>
-                </Link>
-              </li>
-
               {/* payment success */}
               <li>
                 <Link
@@ -226,8 +200,20 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
-              {/* Settings */}
+              {/* profile */}
               <li>
+                <Link
+                  to={"/dashboard/profile"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Profile"
+                >
+                  <HiOutlineUser className="text-blue-400" size={20} />
+                  <span className="is-drawer-close:hidden">Profile</span>
+                </Link>
+              </li>
+
+              {/* setting */}
+              {/* <li>
                 <button
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60"
                   data-tip="Settings"
@@ -249,7 +235,7 @@ const DashboardLayout = () => {
                   </svg>
                   <span className="is-drawer-close:hidden">Settings</span>
                 </button>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

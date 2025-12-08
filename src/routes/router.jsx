@@ -18,6 +18,7 @@ import PendingOrders from "../pages/Dashboards/ManagerDashBoard/PendingOrders/Pe
 import ApproveOrders from "../pages/Dashboards/ManagerDashBoard/ApproveOrders/ApproveOrders";
 import TrackOrders from "../pages/Dashboards/BuyerDashBoard/TrackOrders/TrackOrders";
 import OrderDetails from "../pages/Dashboards/AdminDashBoard/OrderDetails/OrderDetails";
+import MyProfile from "../pages/Dashboards/MyProfile/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +53,9 @@ export const router = createBrowserRouter([
       { path: "my-orders", Component: MyOrders },
       { path: "track-order/:orderId", Component: TrackOrders },
       { path: "payment-success", Component: PaymentSuccess },
+
+      // common profile
+      { path: "profile", Component: MyProfile },
     ],
   },
 ]);

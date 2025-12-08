@@ -95,7 +95,7 @@ const OrderDetails = () => {
           </div>
 
           {/* ORDER SUMMARY */}
-          <div className="p-6 rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
+          <div className="p-6 rounded-xl bg-linear-to-br from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
 
             <p className="text-lg">
