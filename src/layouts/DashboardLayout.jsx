@@ -122,6 +122,18 @@ const DashboardLayout = () => {
                 </Link>
               </li>
 
+              {/* Order Details */}
+              <li>
+                <Link
+                  to={"/dashboard/order-details/:orderId"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
+                  data-tip="Order Details"
+                >
+                  <FiPackage className="text-blue-400" size={20} />
+                  <span className="is-drawer-close:hidden">Order Details</span>
+                </Link>
+              </li>
+
               {/* Manager route */}
               {/* add product */}
               <li>

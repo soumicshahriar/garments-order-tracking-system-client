@@ -17,6 +17,7 @@ import ManageProducts from "../pages/Dashboards/ManagerDashBoard/ManageProducts/
 import PendingOrders from "../pages/Dashboards/ManagerDashBoard/PendingOrders/PendingOrders";
 import ApproveOrders from "../pages/Dashboards/ManagerDashBoard/ApproveOrders/ApproveOrders";
 import TrackOrders from "../pages/Dashboards/BuyerDashBoard/TrackOrders/TrackOrders";
+import OrderDetails from "../pages/Dashboards/AdminDashBoard/OrderDetails/OrderDetails";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
       { path: "manage-users", Component: ManageUsers },
       { path: "all-products", Component: Products },
       { path: "all-orders", Component: AllOrders },
+      { path: "order-details/:orderId", Component: OrderDetails },
 
       // manager dashboard
       { path: "add-product", Component: AddProduct },

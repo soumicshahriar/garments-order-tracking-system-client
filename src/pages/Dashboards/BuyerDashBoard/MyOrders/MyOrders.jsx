@@ -45,6 +45,7 @@ const MyOrders = () => {
               <th className="border p-2">Product</th>
               <th className="border p-2">Quantity</th>
               <th className="border p-2">Status</th>
+              <th className="border p-2">Order Status</th>
               <th className="border p-2">Payment</th>
               <th className="border p-2">Actions</th>
             </tr>
@@ -57,6 +58,7 @@ const MyOrders = () => {
                 <td className="border p-2">{order.productTitle}</td>
                 <td className="border p-2">{order.quantity}</td>
                 <td className="border p-2 capitalize">{order.status}</td>
+                <td className="border p-2 capitalize">{order.orderStatus}</td>
                 <td className="border p-2">{order.paymentMethod}</td>
 
                 <td className="border p-2 space-x-2">
