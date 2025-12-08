@@ -96,10 +96,10 @@ const AllProducts = () => {
     );
   }
 
+  console.log(filteredProducts);
+
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 min-h-screen relative overflow-hidden">
-     
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -225,7 +225,7 @@ const AllProducts = () => {
                           product.images[0] ||
                           "https://via.placeholder.com/300x400?text=No+Image"
                         }
-                        alt={product.name || product.title || "Product"}
+                        alt={product.title || "Product"}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
 
@@ -278,13 +278,13 @@ const AllProducts = () => {
                       <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 mb-4">
                         <div>
                           <p className="md:text-lg sm:text-base font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400">
-                            ${(product.price || 0).toFixed(2)}
+                            ${product.price}
                           </p>
-                          {product.originalPrice && (
+                          {/* {product.originalPrice && (
                             <p className="text-sm text-gray-500 line-through">
                               ${(product.originalPrice || 0).toFixed(2)}
                             </p>
-                          )}
+                          )} */}
                         </div>
                         <div className="text-right">
                           {product?.availableQuantity > 0 ? (

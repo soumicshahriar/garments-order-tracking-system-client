@@ -121,7 +121,7 @@ const OurProducts = () => {
                   <div className="flex items-center justify-between mt-4 mb-2">
                     <div>
                       <p className="text-lg sm:text-base font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400">
-                        ${(product.price || 0).toFixed(2)}
+                        ${product.price}
                       </p>
                     </div>
                     <div className="text-right">

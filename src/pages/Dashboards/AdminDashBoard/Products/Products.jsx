@@ -109,7 +109,7 @@ const Products = () => {
                 </td>
 
                 <td className="font-semibold">{product.title}</td>
-                <td>${product.price.toFixed(2)}</td>
+                <td>${product.price}</td>
                 <td>{product.category}</td>
                 <td>{product.createdBy?.name}</td>
 

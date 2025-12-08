@@ -11,7 +11,7 @@ const ProductDetails = () => {
 
   const axiosInstance = useAxios();
   const { id } = useParams();
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
 
   // get user by email
@@ -163,11 +163,7 @@ const ProductDetails = () => {
         {product.paymentOption && product.paymentOption.length > 0 && (
           <div className="payment-options">
             <h3>Payment Options</h3>
-            <ul className="payment-list">
-              {product?.paymentOption.map((option, index) => (
-                <li key={index}>{option}</li>
-              ))}
-            </ul>
+            <ul className="payment-list">{product.paymentOption}</ul>
           </div>
         )}
 
