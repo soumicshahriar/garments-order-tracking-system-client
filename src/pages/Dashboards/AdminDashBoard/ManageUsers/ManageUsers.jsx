@@ -17,6 +17,9 @@ const ManageUsers = () => {
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  // search users
+  const [searchEmail, setSearchEmail] = useState("");
+
   // suspend user
   const [suspendUser, setSuspendUser] = useState(null);
   const [suspendReason, setSuspendReason] = useState("");
@@ -43,7 +46,10 @@ const ManageUsers = () => {
   const filteredUser = allUsers.filter((user) => {
     const roleMatch = roleFilter === "all" || user.role === roleFilter;
     const statusMatch = statusFilter === "all" || user.status === statusFilter;
-    return roleMatch && statusMatch;
+    const emailMatch = user.email
+      .toLowerCase()
+      .includes(searchEmail.toLowerCase());
+    return roleMatch && statusMatch && emailMatch;
   });
 
   const handleUpdateRole = async () => {
@@ -121,11 +127,15 @@ const ManageUsers = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-4 text-gray-200">
-        Manage Users : ({allUsers.length})
+        Manage Users : ({allUsers.length}) ||{" "}
+        <span className="text-yellow-400">
+          Filtered User: ({filteredUser.length})
+        </span>
       </h2>
 
-      {/* filter */}
+      {/* Filter */}
       <div className="flex gap-10 my-10">
+        {/* Role filter */}
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
@@ -137,6 +147,7 @@ const ManageUsers = () => {
           <option value="buyer">Buyer</option>
         </select>
 
+        {/* Status filter */}
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -147,6 +158,15 @@ const ManageUsers = () => {
           <option value="approved">Approved</option>
           <option value="suspend">Suspend</option>
         </select>
+
+        {/* Search Email */}
+        <input
+          type="text"
+          placeholder="Search by email..."
+          value={searchEmail}
+          onChange={(e) => setSearchEmail(e.target.value)}
+          className="input input-bordered bg-gray-800 text-gray-200 w-64"
+        />
       </div>
 
       <div className="overflow-x-auto rounded-lg shadow-lg">
