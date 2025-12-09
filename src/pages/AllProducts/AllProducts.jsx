@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import { FaShoppingCart, FaHeart, FaChevronDown } from "react-icons/fa";
@@ -9,6 +9,10 @@ const AllProducts = () => {
   const [sortBy, setSortBy] = useState("newest");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemPerPage = 9;
 
   const {
     data: allProducts = [],
@@ -29,7 +33,7 @@ const AllProducts = () => {
     return Array.from(cats);
   }, [allProducts]);
 
-  console.log("categories", categories);
+  // console.log("categories", categories);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -68,6 +72,17 @@ const AllProducts = () => {
     return filtered;
   }, [allProducts, sortBy, priceRange, selectedCategory]);
 
+  // apply pagination
+  const totalPages = Math.ceil(filteredProducts.length / itemPerPage);
+  const currentProducts = useMemo(() => {
+    const start = (currentPage - 1) * itemPerPage;
+    return filteredProducts.slice(start, start + itemPerPage);
+  }, [filteredProducts, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortBy, priceRange, selectedCategory]);
+
   if (isPending) {
     return (
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
@@ -94,7 +109,7 @@ const AllProducts = () => {
     );
   }
 
-  console.log(filteredProducts);
+  // console.log(filteredProducts);
 
   return (
     <section className="py-12 sm:py-16 md:py-20 lg:py-24 min-h-screen relative overflow-hidden">
@@ -204,7 +219,7 @@ const AllProducts = () => {
             {/* Products Grid */}
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
+                {currentProducts.map((product) => (
                   <div
                     key={product._id || product.id}
                     className="group relative bg-linear-to-br from-gray-800 to-gray-900 
@@ -318,6 +333,43 @@ const AllProducts = () => {
                 <p className="text-gray-500 text-sm">
                   Try adjusting your filters or search criteria
                 </p>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-40"
+                >
+                  Prev
+                </button>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-2 rounded-lg ${
+                      currentPage === i + 1
+                        ? "bg-cyan-500 text-white"
+                        : "bg-gray-700 text-gray-300"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(p + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-40"
+                >
+                  Next
+                </button>
               </div>
             )}
           </div>
