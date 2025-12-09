@@ -3,6 +3,8 @@ import HeroBanner from "./HeroBanner";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
 import OurProducts from "./OurProducts";
+import CustomerFeedback from "./CustomerFeedback";
+import PartnerShip from "./PartnerShip/PartnerShip";
 
 const HomePage = () => {
   const axiosInstance = useAxios();
@@ -22,6 +24,11 @@ const HomePage = () => {
       <HeroBanner allProducts={allProducts}></HeroBanner>
       {/* <Slider></Slider> */}
       <OurProducts></OurProducts>
+      {/* customer feedback */}
+      <CustomerFeedback></CustomerFeedback>
+
+      {/* partnership */}
+      <PartnerShip></PartnerShip>
     </div>
   );
 };

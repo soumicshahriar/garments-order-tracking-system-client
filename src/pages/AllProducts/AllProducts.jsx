@@ -7,7 +7,7 @@ import { Link } from "react-router";
 const AllProducts = () => {
   const axiosInstance = useAxios();
   const [sortBy, setSortBy] = useState("newest");
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 15000]);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   // for pagination
@@ -242,11 +242,6 @@ const AllProducts = () => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
 
-                      {/* Wishlist Heart */}
-                      <button className="absolute top-4 right-4 p-2 bg-gray-900/80 backdrop-blur rounded-full shadow-lg hover:bg-red-500 hover:scale-110 transition-all duration-300 border border-gray-700 hover:border-red-500">
-                        <FaHeart className="text-lg text-red-400 hover:text-white" />
-                      </button>
-
                       {/* Stock Badge */}
                       {product.availableQuantity > 0 && (
                         <div className="absolute bottom-4 left-4 px-3 py-1 bg-linear-to-r from-green-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg">
@@ -277,27 +272,12 @@ const AllProducts = () => {
                           "High-quality garment"}
                       </p>
 
-                      {/* Rating (if available) */}
-                      {/* {product.rating && (
-                        <div className="flex items-center space-x-1 mt-2">
-                          <span className="text-yellow-400 text-sm">★</span>
-                          <span className="text-gray-300 text-xs font-semibold">
-                            {product.rating}/5
-                          </span>
-                        </div>
-                      )} */}
-
                       {/* Price */}
                       <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 mb-4">
                         <div>
                           <p className="md:text-lg sm:text-base font-extrabold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400">
                             ${product.price}
                           </p>
-                          {/* {product.originalPrice && (
-                            <p className="text-sm text-gray-500 line-through">
-                              ${(product.originalPrice || 0).toFixed(2)}
-                            </p>
-                          )} */}
                         </div>
                         <div className="text-right">
                           {product?.availableQuantity > 0 ? (

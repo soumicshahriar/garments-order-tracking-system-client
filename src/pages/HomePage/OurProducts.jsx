@@ -82,18 +82,6 @@ const OurProducts = () => {
                     alt={product.title || "Product"}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-
-                  {/* Wishlist Heart */}
-                  {/* <button className="absolute top-4 right-4 p-2 bg-gray-900/80 backdrop-blur rounded-full shadow-lg hover:bg-red-500 hover:scale-110 transition-all duration-300 border border-gray-700 hover:border-red-500">
-                    <FaHeart className="text-lg text-red-400 hover:text-white" />
-                  </button> */}
-
-                  {/* Badge */}
-                  {/* {idx % 3 === 0 && (
-                    <div className="absolute top-4 left-4 px-3 py-1 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
-                      New
-                    </div>
-                  )} */}
                 </div>
 
                 {/* Product Info */}
@@ -105,16 +93,6 @@ const OurProducts = () => {
                   <p className="text-gray-400 text-xs sm:text-sm mt-2 line-clamp-2">
                     {product.description || "High-quality garment"}
                   </p>
-
-                  {/* Rating (if available) */}
-                  {/* {product.rating && (
-                    <div className="flex items-center space-x-1 mt-2">
-                      <span className="text-yellow-400 text-sm">★</span>
-                      <span className="text-gray-300 text-xs font-semibold">
-                        {product.rating}/5
-                      </span>
-                    </div>
-                  )} */}
 
                   {/* Price */}
                   <div className="flex items-center justify-between mt-4 mb-2">

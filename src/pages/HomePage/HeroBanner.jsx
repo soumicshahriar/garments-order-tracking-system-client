@@ -48,93 +48,95 @@ const HeroBanner = ({ allProducts = [] }) => {
   const swiperRef = useRef(null);
 
   return (
-    <div className="hero-slider-container w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-0 mt-16 sm:mt-20 lg:mt-28 ">
-      <section className="w-full ">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          slidesPerView={1}
-          loop={true}
-          autoplay={{ delay: 6000, disableOnInteraction: false }}
-          speed={900}
-          navigation={true}
-          pagination={{ clickable: true }}
-          grabCursor={true}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
-          className="h-auto"
-        >
-          {slides.map((item, idx) => (
-            <SwiperSlide key={item.id || idx}>
-              <div
-                className={`slide flex flex-col-reverse lg:flex-row items-center justify-between gap-6 lg:gap-10 py-8 px-4 sm:px-6 lg:px-12 ${
-                  activeIndex === idx ? "active" : ""
+    <div className="p-4 max-w-7xl mx-auto">
+      <div className="hero-slider-container w-full px-3 sm:px-6 lg:px-0 mt-16 sm:mt-20 lg:mt-28 ">
+        <section className="w-full ">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            slidesPerView={1}
+            loop={true}
+            autoplay={{ delay: 6000, disableOnInteraction: false }}
+            speed={900}
+            navigation={true}
+            pagination={{ clickable: true }}
+            grabCursor={true}
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            className="h-auto"
+          >
+            {slides.map((item, idx) => (
+              <SwiperSlide key={item.id || idx}>
+                <div
+                  className={`slide flex flex-col-reverse lg:flex-row items-center justify-between gap-6 lg:gap-10 py-8 px-4 sm:px-6 lg:px-12 ${
+                    activeIndex === idx ? "active" : ""
+                  }`}
+                >
+                  {/* Text Section */}
+                  <div className="content text-center lg:text-left lg:ml-20 w-full lg:w-1/2">
+                    <h1 className="categoryTitle text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
+                      {item.title}
+                    </h1>
+
+                    <p className="description text-sm sm:text-base md:text-lg text-gray-300 mb-4">
+                      {item.price || item.subtitle}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
+                      <Link
+                        to={`/order-form/${item.id}`}
+                        className="exploreButton text-sm sm:text-base px-5 py-2"
+                      >
+                        Shop Now
+                      </Link>
+
+                      <Link
+                        to={`/product-details/${item.id}`}
+                        className="text-sm text-cyan-200/80 underline"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Image Section */}
+                  <div className="imageCardContainer flex items-center justify-center w-full lg:w-1/2 relative">
+                    <div className="mainImageCard w-52 sm:w-64 md:w-72 lg:w-80 shadow-xl">
+                      <img
+                        src={item.imageMain}
+                        alt={item.title}
+                        className="rounded-xl object-cover w-full h-full"
+                      />
+                    </div>
+
+                    <div className="peekImageCard w-28 sm:w-36 md:w-40 lg:w-48 absolute -right-4 sm:-right-8 bottom-4 opacity-70">
+                      <img
+                        src={item.imagePeek}
+                        alt={`${item.title}-peek`}
+                        className="rounded-xl object-cover w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* Dots */}
+          <div className="flex justify-center mt-4 space-x-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`dot w-2.5 h-2.5 rounded-full transition ${
+                  index === activeIndex
+                    ? "bg-cyan-300 scale-125"
+                    : "bg-gray-500/50"
                 }`}
-              >
-                {/* Text Section */}
-                <div className="content text-center lg:text-left lg:ml-20 w-full lg:w-1/2">
-                  <h1 className="categoryTitle text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
-                    {item.title}
-                  </h1>
-
-                  <p className="description text-sm sm:text-base md:text-lg text-gray-300 mb-4">
-                    {item.price || item.subtitle}
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
-                    <Link
-                      to={`/order-form/${item.id}`}
-                      className="exploreButton text-sm sm:text-base px-5 py-2"
-                    >
-                      Shop Now
-                    </Link>
-
-                    <Link
-                      to={`/product-details/${item.id}`}
-                      className="text-sm text-cyan-200/80 underline"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Image Section */}
-                <div className="imageCardContainer flex items-center justify-center w-full lg:w-1/2 relative">
-                  <div className="mainImageCard w-52 sm:w-64 md:w-72 lg:w-80 shadow-xl">
-                    <img
-                      src={item.imageMain}
-                      alt={item.title}
-                      className="rounded-xl object-cover w-full h-full"
-                    />
-                  </div>
-
-                  <div className="peekImageCard w-28 sm:w-36 md:w-40 lg:w-48 absolute -right-4 sm:-right-8 bottom-4 opacity-70">
-                    <img
-                      src={item.imagePeek}
-                      alt={`${item.title}-peek`}
-                      className="rounded-xl object-cover w-full h-full"
-                    />
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
-        {/* Dots */}
-        <div className="flex justify-center mt-4 space-x-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`dot w-2.5 h-2.5 rounded-full transition ${
-                index === activeIndex
-                  ? "bg-cyan-300 scale-125"
-                  : "bg-gray-500/50"
-              }`}
-              onClick={() => swiperRef.current?.slideToLoop(index)}
-            />
-          ))}
-        </div>
-      </section>
+                onClick={() => swiperRef.current?.slideToLoop(index)}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 };
