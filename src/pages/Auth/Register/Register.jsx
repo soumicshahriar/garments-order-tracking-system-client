@@ -8,7 +8,7 @@ import useAxios from "../../../hooks/useAxios";
 
 // Register page: uses react-hook-form for validation and react-hot-toast for feedback
 const Register = () => {
-  const { createUser } = useAuth();
+  const { createUser, updateUserProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -34,20 +34,21 @@ const Register = () => {
       const authResult = await createUser(data.email, data.password);
       if (!authResult.user) throw new Error("Firebase authentication failed");
 
+      // Step 2: Update Firebase profile
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL: data.photoURL,
+      });
+
       // Step 2: Send user data to backend
       await axiosInstance.post("/users", payload);
 
       // Step 3: Show success toast and redirect
-      toast.success("Account created successfully! Please log in.");
+      toast.success("Account created successfully!");
       reset();
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       console.log(error);
-      // Handle both Firebase and backend errors
-      //   const message =
-      //     error?.response?.data?.message ||
-      //     error.message ||
-      //     "Registration failed. Please try again.";
       toast.error("Email is already used");
     }
   };

@@ -15,6 +15,7 @@ const Navbar = () => {
   // const [user] = useState(false);
   const { user, logOut } = useAuth();
 
+  console.log("user", user);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -26,8 +27,8 @@ const Navbar = () => {
     { label: "All Product", href: "/all-products", icon: BiSolidShoppingBags },
     { label: "About Us", href: "/about", icon: FaShoppingBag },
     { label: "Contact", href: "/contact", icon: MdContactMail },
-    { label: "Dashboard", href: "/dashboard", icon: MdDashboard },
-  ];
+    user && { label: "Dashboard", href: "/dashboard", icon: MdDashboard },
+  ].filter(Boolean);
 
   const handleLogOut = () => {
     logOut()
@@ -90,7 +91,12 @@ const Navbar = () => {
             {user ? (
               <>
                 <div className="flex items-center space-x-2 lg:space-x-3 pl-2 lg:pl-4 border-l border-gray-700">
-                  <FaUserCircle className="text-cyan-400 text-xl md:text-2xl lg:text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
+                  {/* <FaUserCircle  /> */}
+                  <img
+                    src={user.photoURL}
+                    className="text-cyan-400 text-xl w-10 h-10 rounded-full md:text-2xl lg:text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300"
+                    alt="user-photo"
+                  />
                   <button
                     onClick={handleLogOut}
                     className="hidden md:flex items-center space-x-2 px-3 lg:px-4 py-1 lg:py-2 bg-red-600 hover:bg-red-700 text-white text-xs lg:text-sm rounded-lg font-medium transition-colors duration-300 transform hover:scale-105"
@@ -123,7 +129,12 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2 sm:space-x-3">
             {user ? (
-              <FaUserCircle className="text-cyan-400 text-lg sm:text-2xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
+              // <FaUserCircle className="text-cyan-400 text-lg sm:text-2xl cursor-pointer hover:text-blue-400 transition-colors duration-300" />
+              <img
+                src={user.photoURL}
+                className="text-cyan-400 text-xl w-10 h-10 rounded-full md:text-2xl lg:text-3xl cursor-pointer hover:text-blue-400 transition-colors duration-300"
+                alt="user-photo"
+              />
             ) : null}
             <button
               onClick={toggleMenu}

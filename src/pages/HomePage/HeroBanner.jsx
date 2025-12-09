@@ -77,11 +77,14 @@ const HeroBanner = ({ allProducts = [] }) => {
                   <h1 className="categoryTitle">{item.title}</h1>
                   <p className="description">{item.price}</p>
                   <div>
-                    <p href="#" className="exploreButton">
-                      Shop Now
-                    </p>
                     <Link
-                      href="#"
+                      to={`/order-form/${item.id}`}
+                      className="exploreButton"
+                    >
+                      Shop Now
+                    </Link>
+                    <Link
+                      to={`/product-details/${item.id}`}
                       className="ml-3 text-sm text-cyan-200/80  sm:inline-block"
                     >
                       View Details

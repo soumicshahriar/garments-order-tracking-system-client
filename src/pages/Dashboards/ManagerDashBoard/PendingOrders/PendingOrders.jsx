@@ -87,6 +87,8 @@ const PendingOrders = () => {
               <th>Product</th>
               <th>Qty</th>
               <th>Order Date</th>
+              <th>Payment Method</th>
+              <th>payment Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -99,6 +101,8 @@ const PendingOrders = () => {
                 <td>{order.productTitle}</td>
                 <td>{order.quantity}</td>
                 <td>{new Date(order.orderTime).toLocaleDateString()}</td>
+                <td>{order.paymentMethod}</td>
+                <td>{order.status}</td>
 
                 <td className="flex gap-2">
                   <button
