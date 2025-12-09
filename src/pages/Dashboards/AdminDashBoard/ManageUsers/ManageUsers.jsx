@@ -17,6 +17,11 @@ const ManageUsers = () => {
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  // suspend user
+  const [suspendUser, setSuspendUser] = useState(null);
+  const [suspendReason, setSuspendReason] = useState("");
+  const [suspendFeedback, setSuspendFeedback] = useState("");
+
   // Fetch all users
   const {
     data: allUsers = [],
@@ -87,6 +92,29 @@ const ManageUsers = () => {
       refetch();
     } catch (error) {
       toast.error("Failed to delete user");
+    }
+  };
+
+  // handle suspend
+  const submitSuspension = async () => {
+    if (!suspendReason) return toast.error("Select a suspend reason");
+
+    try {
+      await axiosInstance.patch(`/users/update-status/${suspendUser._id}`, {
+        status: "suspended",
+        reason: suspendReason,
+        feedback: suspendFeedback,
+      });
+
+      toast.success("User suspended successfully");
+      refetch();
+
+      // reset modal
+      setSuspendUser(null);
+      setSuspendReason("");
+      setSuspendFeedback("");
+    } catch (error) {
+      toast.error("Failed to suspend user");
     }
   };
 
@@ -217,8 +245,8 @@ const ManageUsers = () => {
 
                   {/* button suspend */}
                   <button
-                    onClick={() => handleStatusChange(user._id, "suspended")}
-                    disabled={user.status === "suspended"} // disable if already suspended
+                    onClick={() => setSuspendUser(user)}
+                    disabled={user.status === "suspended"}
                     className={`btn btn-sm flex items-center gap-1 ${
                       user.status === "suspended"
                         ? "btn-disabled cursor-not-allowed"
@@ -316,6 +344,67 @@ const ManageUsers = () => {
 
               <button className="btn btn-primary" onClick={handleUpdateRole}>
                 Update Role
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
+
+      {/* Suspend Modal */}
+      {suspendUser && (
+        <dialog open className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box bg-gray-900 text-gray-200">
+            <h3 className="font-bold text-lg">
+              Suspend User: {suspendUser.name}
+            </h3>
+
+            <div className="mt-4 space-y-4">
+              {/* Reason Select */}
+              <div>
+                <label className="block font-medium mb-1">Suspend Reason</label>
+                <select
+                  value={suspendReason}
+                  onChange={(e) => setSuspendReason(e.target.value)}
+                  className="select select-bordered w-full bg-gray-800"
+                >
+                  <option value="">-- Select Reason --</option>
+                  <option value="Violation of policies">
+                    Violation of policies
+                  </option>
+                  <option value="Spamming">Spamming</option>
+                  <option value="Fraudulent Activity">
+                    Fraudulent Activity
+                  </option>
+                  <option value="Non-cooperation">Non-cooperation</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              {/* Feedback Field */}
+              <div>
+                <label className="block font-medium mb-1">
+                  Additional Feedback
+                </label>
+                <textarea
+                  className="textarea textarea-bordered w-full bg-gray-800"
+                  placeholder="Write details..."
+                  value={suspendFeedback}
+                  onChange={(e) => setSuspendFeedback(e.target.value)}
+                  rows={3}
+                ></textarea>
+              </div>
+            </div>
+
+            <div className="modal-action flex justify-between">
+              <button
+                className="btn btn-outline"
+                onClick={() => setSuspendUser(null)}
+              >
+                Cancel
+              </button>
+
+              <button className="btn btn-error" onClick={submitSuspension}>
+                Suspend User
               </button>
             </div>
           </div>

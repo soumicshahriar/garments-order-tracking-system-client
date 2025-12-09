@@ -55,9 +55,7 @@ const AllProducts = () => {
         filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
         break;
       case "name-a-z":
-        filtered.sort((a, b) =>
-          (a.name || a.title || "").localeCompare(b.name || b.title || "")
-        );
+        filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
         break;
       case "newest":
       default:
@@ -235,9 +233,9 @@ const AllProducts = () => {
                       </button>
 
                       {/* Stock Badge */}
-                      {product.quantity > 0 && (
+                      {product.availableQuantity > 0 && (
                         <div className="absolute bottom-4 left-4 px-3 py-1 bg-linear-to-r from-green-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg">
-                          {product.quantity} In Stock
+                          {product.availableQuantity} In Stock
                         </div>
                       )}
                     </div>
@@ -253,7 +251,7 @@ const AllProducts = () => {
 
                       {/* Product Name */}
                       <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 line-clamp-2">
-                        {product.name || product.title || "Product"}
+                        {product.title || "Product"}
                       </h3>
 
                       {/* Product Description */}
@@ -265,14 +263,14 @@ const AllProducts = () => {
                       </p>
 
                       {/* Rating (if available) */}
-                      {product.rating && (
+                      {/* {product.rating && (
                         <div className="flex items-center space-x-1 mt-2">
                           <span className="text-yellow-400 text-sm">★</span>
                           <span className="text-gray-300 text-xs font-semibold">
                             {product.rating}/5
                           </span>
                         </div>
-                      )}
+                      )} */}
 
                       {/* Price */}
                       <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700 mb-4">
@@ -303,7 +301,7 @@ const AllProducts = () => {
                       <Link
                         to={`/product-details/${product._id}`}
                         className="w-full mt-auto px-4 py-2 bg-linear-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-sm sm:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center space-x-2 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={product.quantity === 0}
+                        disabled={product.availableQuantity === 0}
                       >
                         <FaShoppingCart className="text-lg" />
                         <span>View Details</span>

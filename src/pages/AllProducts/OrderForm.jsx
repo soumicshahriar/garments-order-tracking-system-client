@@ -5,12 +5,16 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import Loader from "../Loader/Loader";
+import useSuspend from "../../hooks/useSuspend";
 
 const OrderForm = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const axiosInstance = useAxios();
   const navigate = useNavigate();
+
+  const { status } = useSuspend();
+  console.log("status", status);
 
   // ============================
   //  Fetch Product by ID
@@ -29,8 +33,7 @@ const OrderForm = () => {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
+
     formState: { errors },
   } = useForm();
 
@@ -214,12 +217,22 @@ const OrderForm = () => {
           </div>
 
           {/* Submit */}
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-600 rounded hover:bg-blue-700 duration-300"
-          >
-            Confirm Order
-          </button>
+          {status === "suspended" ? (
+            <button
+              type="submit"
+              className="w-full py-2 bg-gray-600 rounded  duration-300"
+              disabled
+            >
+              You Are Suspended
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full py-2 bg-blue-600 rounded hover:bg-blue-700 duration-300"
+            >
+              Confirm Order
+            </button>
+          )}
         </form>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import useAxios from "../../hooks/useAxios";
 import { Link } from "react-router";
@@ -65,7 +64,7 @@ const OurProducts = () => {
         {/* Products Grid */}
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 ">
-            {products.map((product, idx) => (
+            {products.map((product) => (
               <div
                 key={product._id || product.id}
                 className="group relative bg-linear-to-br from-gray-800 to-gray-900 rounded-lg overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-cyan-500/30 transition-all duration-300 border border-gray-700 hover:border-cyan-500/50 transform hover:-translate-y-2 flex flex-col"
@@ -80,21 +79,21 @@ const OurProducts = () => {
                       product.images[0] ||
                       "https://via.placeholder.com/300x400?text=No+Image"
                     }
-                    alt={product.name || product.title || "Product"}
+                    alt={product.title || "Product"}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
 
                   {/* Wishlist Heart */}
-                  <button className="absolute top-4 right-4 p-2 bg-gray-900/80 backdrop-blur rounded-full shadow-lg hover:bg-red-500 hover:scale-110 transition-all duration-300 border border-gray-700 hover:border-red-500">
+                  {/* <button className="absolute top-4 right-4 p-2 bg-gray-900/80 backdrop-blur rounded-full shadow-lg hover:bg-red-500 hover:scale-110 transition-all duration-300 border border-gray-700 hover:border-red-500">
                     <FaHeart className="text-lg text-red-400 hover:text-white" />
-                  </button>
+                  </button> */}
 
                   {/* Badge */}
-                  {idx % 3 === 0 && (
+                  {/* {idx % 3 === 0 && (
                     <div className="absolute top-4 left-4 px-3 py-1 bg-linear-to-r from-cyan-500 to-blue-600 text-white text-xs font-bold rounded-full shadow-lg">
                       New
                     </div>
-                  )}
+                  )} */}
                 </div>
 
                 {/* Product Info */}
@@ -108,14 +107,14 @@ const OurProducts = () => {
                   </p>
 
                   {/* Rating (if available) */}
-                  {product.rating && (
+                  {/* {product.rating && (
                     <div className="flex items-center space-x-1 mt-2">
                       <span className="text-yellow-400 text-sm">★</span>
                       <span className="text-gray-300 text-xs font-semibold">
                         {product.rating}/5
                       </span>
                     </div>
-                  )}
+                  )} */}
 
                   {/* Price */}
                   <div className="flex items-center justify-between mt-4 mb-2">
@@ -125,9 +124,15 @@ const OurProducts = () => {
                       </p>
                     </div>
                     <div className="text-right">
-                      {product.availableQuantity && (
-                        <p className="text-xs font-semibold text-green-400">
-                          In Stock
+                      {product.availableQuantity > 0 ? (
+                        <>
+                          <p className="text-xs font-semibold text-green-400">
+                            In Stock <span>({product.availableQuantity})</span>
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-xs font-semibold text-yellow-400">
+                          Out of Stock
                         </p>
                       )}
                     </div>

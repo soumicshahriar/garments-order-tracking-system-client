@@ -62,6 +62,13 @@ const MyProfile = () => {
           >
             {profile?.status.toUpperCase()}
           </p>
+          <p className="bg-yellow-500 text-black rounded-2xl">
+            {profile.status === "suspended" && (
+              <>
+                <p>{profile.suspendReason}</p>
+              </>
+            )}
+          </p>
 
           <p className="text-gray-300">
             <span className="font-semibold">Role:</span> {profile?.role}

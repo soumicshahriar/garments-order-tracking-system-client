@@ -3,18 +3,29 @@ import React, { useRef, useState } from "react";
 import useAxios from "../../../../hooks/useAxios";
 import Loader from "../../../Loader/Loader";
 import Swal from "sweetalert2";
+import useAuth from "../../../../hooks/useAuth";
 
 const PendingOrders = () => {
   const axiosInstance = useAxios();
   const modalRef = useRef();
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const { user } = useAuth();
+
+  // Fetch users
+  const { data: users = [], isPending } = useQuery({
+    queryKey: ["users", user?.email],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/users?email=${user.email}`);
+      return res.data;
+    },
+    refetchInterval: 3000, // 🔥 Auto update every 3 sec
+    refetchIntervalInBackground: true, // Works even if tab not focused
+  });
+  const userStatus = users[0];
+  console.log(userStatus);
 
   // Fetch all pending orders
-  const {
-    data: pendingOrder = [],
-    isPending,
-    refetch,
-  } = useQuery({
+  const { data: pendingOrder = [], refetch: refetchPendingOrders } = useQuery({
     queryKey: ["pendingOrders", "Pending"],
     queryFn: async () => {
       const res = await axiosInstance.get(
@@ -39,7 +50,7 @@ const PendingOrders = () => {
         background: "linear-gradient(135deg,#0f172a,#1e293b)",
         color: "#fff",
       });
-      refetch();
+      refetchPendingOrders();
     },
   });
 
@@ -58,7 +69,7 @@ const PendingOrders = () => {
         background: "linear-gradient(135deg,#0f172a,#1e293b)",
         color: "#fff",
       });
-      refetch();
+      refetchPendingOrders();
     },
   });
 
@@ -105,19 +116,39 @@ const PendingOrders = () => {
                 <td>{order.status}</td>
 
                 <td className="flex gap-2">
-                  <button
-                    onClick={() => approveMutation.mutate(order._id)}
-                    className="btn btn-xs bg-green-600 text-white"
-                  >
-                    Approve
-                  </button>
+                  {userStatus.status === "suspended" ? (
+                    <>
+                      <button
+                        disabled
+                        className="btn btn-xs bg-gray-600 text-white"
+                      >
+                        Approve
+                      </button>
 
-                  <button
-                    onClick={() => rejectMutation.mutate(order._id)}
-                    className="btn btn-xs bg-red-600 text-white"
-                  >
-                    Reject
-                  </button>
+                      <button
+                        disabled
+                        className="btn btn-xs bg-gray-600 text-white"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => approveMutation.mutate(order._id)}
+                        className="btn btn-xs bg-green-600 text-white"
+                      >
+                        Approve
+                      </button>
+
+                      <button
+                        onClick={() => rejectMutation.mutate(order._id)}
+                        className="btn btn-xs bg-red-600 text-white"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
 
                   <button
                     onClick={() => openModal(order)}

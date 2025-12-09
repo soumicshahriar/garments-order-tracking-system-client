@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import useAxios from "../../../../hooks/useAxios";
 import useAuth from "../../../../hooks/useAuth";
+import useSuspend from "../../../../hooks/useSuspend";
 
 const categories = [
   "Shirt",
@@ -22,6 +23,8 @@ const AddProduct = () => {
   const axiosInstance = useAxios();
   const [imagePreview, setImagePreview] = useState([]);
   const { user } = useAuth();
+  const { status } = useSuspend();
+  console.log(status);
 
   const {
     register,
@@ -110,7 +113,7 @@ const AddProduct = () => {
 
   return (
     <div className="p-4">
-      <div className="max-w-3xl mx-auto p-6 mt-20 bg-gray-900 rounded">
+      <div className="max-w-3xl mx-auto p-6  bg-gray-900 rounded">
         <h2 className="text-3xl font-bold mb-6 text-white">Add New Product</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -202,13 +205,23 @@ const AddProduct = () => {
             Show on Home Page
           </label>
 
-          <button
-            type="submit"
-            disabled={mutation.isPending}
-            className="w-full bg-blue-600 p-3 rounded text-white mt-4"
-          >
-            {mutation.isPending ? "Saving..." : "Add Product"}
-          </button>
+          {status === "suspended" ? (
+            <button
+              type="submit"
+              className="w-full bg-gray-600 p-3 rounded text-white mt-4"
+              disabled
+            >
+              You are suspended
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="w-full bg-blue-600 p-3 rounded text-white mt-4"
+            >
+              {mutation.isPending ? "Saving..." : "Add Product"}
+            </button>
+          )}
         </form>
       </div>
     </div>

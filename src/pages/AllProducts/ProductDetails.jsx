@@ -38,36 +38,6 @@ const ProductDetails = () => {
   });
   console.log(product);
 
-  // const handleQuantityChange = (e) => {
-  //   const value = parseInt(e.target.value);
-  //   if (value >= product.minimumOrder && value <= product.availableQuantity) {
-  //     setQuantity(value);
-  //   }
-  // };
-
-  // const handleIncrement = () => {
-  //   if (quantity < product.availableQuantity) {
-  //     setQuantity(quantity + 1);
-  //   }
-  // };
-
-  // const handleDecrement = () => {
-  //   if (quantity > 1) {
-  //     setQuantity(quantity - 1);
-  //   }
-  // };
-
-  // const handleOrder = () => {
-  //   console.log("Order placed:", {
-  //     productId: product._id,
-  //     productName: product.title,
-  //     quantity,
-  //     totalPrice: product.price * quantity,
-  //   });
-  //   // TODO: Implement order booking functionality
-  //   alert(`Order placed for ${quantity} units of ${product?.title}`);
-  // };
-
   if (isLoading) {
     return <div className="loading">Loading product details...</div>;
   }
@@ -134,7 +104,7 @@ const ProductDetails = () => {
         {/* Description */}
         <div className="product-description">
           <h3>Description</h3>
-          <p>{product.productDescription}</p>
+          <p>{product.description}</p>
         </div>
 
         {/* Product Details Grid */}
@@ -166,48 +136,6 @@ const ProductDetails = () => {
             <ul className="payment-list">{product.paymentOption}</ul>
           </div>
         )}
-
-        {/* Quantity Selector */}
-        {/* <div className="quantity-section">
-          <label htmlFor="quantity" className="quantity-label">
-            Select Quantity:
-          </label>
-          <div className="quantity-controls">
-            <button
-              className="qty-btn"
-              // onClick={handleDecrement}
-              disabled={quantity <= 1}
-            >
-              −
-            </button>
-            <input
-              id="quantity"
-              type="number"
-              value={quantity}
-              // onChange={handleQuantityChange}
-              min={product.minimumOrder}
-              max={product.availableQuantity}
-              className="quantity-input "
-            />
-            <button
-              className="qty-btn"
-              // onClick={handleIncrement}
-              disabled={quantity >= product.availableQuantity}
-            >
-              +
-            </button>
-          </div>
-          <p className="quantity-info">
-            (Min: {product.minimumOrderQuantity} | Max:{" "}
-            {product.availableQuantity})
-          </p>
-        </div> */}
-
-        {/* Total Price */}
-        {/* <div className="total-price">
-          <span>Total Price:</span>
-          <span className="price-value">${product.price * quantity}</span>
-        </div> */}
 
         {/* Order Button */}
         {userObj?.role === "buyer" && (
