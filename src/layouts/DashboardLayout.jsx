@@ -17,6 +17,7 @@ import useRole from "../hooks/useRole";
 const DashboardLayout = () => {
   const { role } = useRole();
   // console.log(role);
+  //
   return (
     <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900  min-h-screen">
       <div className="drawer lg:drawer-open">

@@ -17,18 +17,12 @@ const HomePage = () => {
     },
   });
 
-  console.log(allProducts);
-
   return (
     <div>
-      <HeroBanner allProducts={allProducts}></HeroBanner>
-      {/* <Slider></Slider> */}
-      <OurProducts></OurProducts>
-      {/* customer feedback */}
-      <CustomerFeedback></CustomerFeedback>
-
-      {/* partnership */}
-      <PartnerShip></PartnerShip>
+      <HeroBanner allProducts={allProducts} />
+      <OurProducts />
+      <CustomerFeedback />
+      <PartnerShip />
     </div>
   );
 };

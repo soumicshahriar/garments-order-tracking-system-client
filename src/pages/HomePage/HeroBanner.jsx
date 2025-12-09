@@ -5,10 +5,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useState, useRef } from "react";
 import { Link } from "react-router";
+import { motion } from "framer-motion";
 import "./HeroBanner.css";
 
 const HeroBanner = ({ allProducts = [] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef(null);
+
   const fallback = [
     {
       id: "f1",
@@ -45,98 +48,107 @@ const HeroBanner = ({ allProducts = [] }) => {
           imagePeek: f.image,
         }));
 
-  const swiperRef = useRef(null);
-
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <div className="hero-slider-container w-full px-3 sm:px-6 lg:px-0 mt-16 sm:mt-20 lg:mt-28 ">
-        <section className="w-full ">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            slidesPerView={1}
-            loop={true}
-            autoplay={{ delay: 6000, disableOnInteraction: false }}
-            speed={900}
-            navigation={true}
-            pagination={{ clickable: true }}
-            grabCursor={true}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            className="h-auto"
-          >
-            {slides.map((item, idx) => (
-              <SwiperSlide key={item.id || idx}>
-                <div
-                  className={`slide flex flex-col-reverse lg:flex-row items-center justify-between gap-6 lg:gap-10 py-8 px-4 sm:px-6 lg:px-12 ${
-                    activeIndex === idx ? "active" : ""
-                  }`}
+    <div className="p-4 max-w-7xl mx-auto relative">
+      {/* 🌟 FLOATING ICONS */}
+      {/* <motion.img
+        src="https://cdn-icons-png.flaticon.com/512/4341/4341054.png"
+        className="w-12 h-12 absolute top-20 left-8 opacity-40"
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 4, repeat: Infinity }}
+      /> */}
+      {/* <motion.img
+        src="https://cdn-icons-png.flaticon.com/512/2991/2991108.png"
+        className="w-10 h-10 absolute top-40 right-6 opacity-40"
+        animate={{ y: [0, -20, 0] }}
+        transition={{ duration: 5, repeat: Infinity }}
+      /> */}
+
+      <motion.div
+        className="bg-black/20 rounded-lg mt-10"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}
+      >
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          slidesPerView={1}
+          loop
+          autoplay={{ delay: 5000 }}
+          speed={1000}
+          navigation
+          pagination={{ clickable: true }}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          className="h-auto"
+        >
+          {slides.map((item, idx) => (
+            <SwiperSlide key={idx}>
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                viewport={{ once: true }}
+                className="flex flex-col-reverse lg:flex-row items-center justify-between gap-6 lg:gap-10 py-10 px-6 lg:px-12"
+              >
+                {/* TEXT */}
+                <motion.div
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="w-full lg:w-1/2 text-center lg:text-left"
                 >
-                  {/* Text Section */}
-                  <div className="content text-center lg:text-left lg:ml-20 w-full lg:w-1/2">
-                    <h1 className="categoryTitle text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
-                      {item.title}
-                    </h1>
+                  <h1 className="text-3xl md:text-5xl font-bold">
+                    {item.title}
+                  </h1>
+                  <p className="text-gray-300 mt-2 mb-4 text-lg">
+                    {item.price || item.subtitle}
+                  </p>
 
-                    <p className="description text-sm sm:text-base md:text-lg text-gray-300 mb-4">
-                      {item.price || item.subtitle}
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
-                      <Link
-                        to={`/order-form/${item.id}`}
-                        className="exploreButton text-sm sm:text-base px-5 py-2"
-                      >
-                        Shop Now
-                      </Link>
-
-                      <Link
-                        to={`/product-details/${item.id}`}
-                        className="text-sm text-cyan-200/80 underline"
-                      >
-                        View Details
-                      </Link>
-                    </div>
+                  <div className="flex items-center gap-3 justify-center lg:justify-start">
+                    <Link
+                      to={`/order-form/${item.id}`}
+                      className="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition"
+                    >
+                      Shop Now
+                    </Link>
+                    <Link
+                      to={`/product-details/${item.id}`}
+                      className="text-cyan-300 underline"
+                    >
+                      View Details
+                    </Link>
                   </div>
+                </motion.div>
 
-                  {/* Image Section */}
-                  <div className="imageCardContainer flex items-center justify-center w-full lg:w-1/2 relative">
-                    <div className="mainImageCard w-52 sm:w-64 md:w-72 lg:w-80 shadow-xl">
-                      <img
-                        src={item.imageMain}
-                        alt={item.title}
-                        className="rounded-xl object-cover w-full h-full"
-                      />
-                    </div>
-
-                    <div className="peekImageCard w-28 sm:w-36 md:w-40 lg:w-48 absolute -right-4 sm:-right-8 bottom-4 opacity-70">
-                      <img
-                        src={item.imagePeek}
-                        alt={`${item.title}-peek`}
-                        className="rounded-xl object-cover w-full h-full"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Dots */}
-          <div className="flex justify-center mt-4 space-x-2">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                className={`dot w-2.5 h-2.5 rounded-full transition ${
-                  index === activeIndex
-                    ? "bg-cyan-300 scale-125"
-                    : "bg-gray-500/50"
-                }`}
-                onClick={() => swiperRef.current?.slideToLoop(index)}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
+                {/* IMAGE — PARALLAX EFFECT */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8 }}
+                  className="relative"
+                >
+                  <motion.img
+                    src={item.imageMain}
+                    alt="main"
+                    className="rounded-xl w-72 lg:w-80 shadow-xl"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.4 }}
+                  />
+                  <motion.img
+                    src={item.imagePeek}
+                    alt="peek"
+                    className="rounded-xl w-40 absolute -right-8 bottom-4 opacity-70 shadow-lg"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+                </motion.div>
+              </motion.div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </motion.div>
     </div>
   );
 };

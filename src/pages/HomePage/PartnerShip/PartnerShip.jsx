@@ -13,7 +13,7 @@ const PartnerShip = () => {
 
   return (
     <div className="p-4 max-w-7xl mx-auto ">
-      <div className="w-full bg-gray-900  py-10 border-x rounded-xl my-10">
+      <div className="w-full bg-gray-900  py-10 border-x rounded-xl ">
         <h2 className="text-center text-xl font-semibold text-gray-200 mb-6">
           Our Trusted Partners
         </h2>

@@ -15,8 +15,8 @@ const feedbacks = [
 
 const CustomerFeedback = () => {
   return (
-    <div className="p-4 max-w-7xl mx-auto ">
-      <div className=" bg-gray-900 py-4 rounded-xl border-x">
+    <div className="px-4 max-w-7xl mx-auto my-10">
+      <div className=" bg-gray-900 py-8 rounded-xl border-x">
         <h2 className="text-center mb-4 font-semibold text-xl">
           Customer Feedback
         </h2>
