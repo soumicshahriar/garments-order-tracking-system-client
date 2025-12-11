@@ -27,8 +27,8 @@ const Navbar = () => {
   const navLinks = [
     { label: "Home", href: "/", icon: MdHome },
     { label: "All Product", href: "/all-products", icon: BiSolidShoppingBags },
-    { label: "About Us", href: "/about", icon: FaShoppingBag },
-    { label: "Contact", href: "/contact", icon: MdContactMail },
+    { label: "About Us", href: "/about-us", icon: FaShoppingBag },
+    { label: "Contact", href: "/contact-info", icon: MdContactMail },
     user &&
       role === "admin" && {
         label: "Dashboard",

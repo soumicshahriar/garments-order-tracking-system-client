@@ -22,6 +22,8 @@ import MyProfile from "../pages/Dashboards/MyProfile/MyProfile";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import AdminDashboard from "../pages/Dashboards/AdminDashBoard/AdminDashboard";
+import AboutUs from "../pages/AboutUs/AboutUs";
+import ContactInfo from "../pages/ContactInfo/ContactInfo";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: HomePage },
       { path: "all-products", Component: AllProducts },
+      { path: "about-us", Component: AboutUs },
+      { path: "contact-info", Component: ContactInfo },
       { path: "product-details/:id", Component: ProductDetails },
       { path: "order-form/:id", Component: OrderForm },
       { path: "register", Component: Register },
