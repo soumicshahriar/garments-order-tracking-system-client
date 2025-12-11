@@ -5,11 +5,12 @@ import useAxios from "../../hooks/useAxios";
 import OurProducts from "./OurProducts";
 import CustomerFeedback from "./CustomerFeedback";
 import PartnerShip from "./PartnerShip/PartnerShip";
+import Loader from "../Loader/Loader";
 
 const HomePage = () => {
   const axiosInstance = useAxios();
 
-  const { data: allProducts = [] } = useQuery({
+  const { data: allProducts = [], isLoading } = useQuery({
     queryKey: ["sliderProducts"],
     queryFn: async () => {
       const res = await axiosInstance.get("/all-products");
@@ -17,9 +18,13 @@ const HomePage = () => {
     },
   });
 
+  if (isLoading) {
+    return <Loader></Loader>;
+  }
+
   return (
     <div>
-      <HeroBanner allProducts={allProducts} />
+      <HeroBanner allProducts={allProducts} isLoading={isLoading} />
       <OurProducts />
       <CustomerFeedback />
       <PartnerShip />

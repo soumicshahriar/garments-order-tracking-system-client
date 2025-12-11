@@ -9,7 +9,7 @@ const OrderDetails = () => {
   const { orderId } = useParams();
   const axiosInstance = useAxios();
 
-  const { data: orderDetails = {}, isPending } = useQuery({
+  const { data: orderDetails = {}, isLoading } = useQuery({
     queryKey: ["orderDetails", orderId],
     queryFn: async () => {
       const res = await axiosInstance.get(`/orders/${orderId}`);
@@ -17,7 +17,7 @@ const OrderDetails = () => {
     },
   });
 
-  if (isPending) {
+  if (isLoading) {
     return <Loader />;
   }
 

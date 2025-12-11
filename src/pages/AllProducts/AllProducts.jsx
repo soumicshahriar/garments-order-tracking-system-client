@@ -3,7 +3,7 @@ import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import { FaShoppingCart, FaHeart, FaChevronDown } from "react-icons/fa";
 import { Link } from "react-router";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 const AllProducts = () => {
   const axiosInstance = useAxios();
@@ -17,7 +17,7 @@ const AllProducts = () => {
 
   const {
     data: allProducts = [],
-    isPending,
+    isLoading,
     isError,
     error,
   } = useQuery({
@@ -136,7 +136,7 @@ const AllProducts = () => {
     exit: { opacity: 0 },
   };
 
-  if (isPending) {
+  if (isLoading) {
     return (
       <motion.section
         initial={{ opacity: 0 }}

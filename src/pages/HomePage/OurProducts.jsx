@@ -11,7 +11,7 @@ const OurProducts = () => {
   // TanStack Query hook
   const {
     data: products = [],
-    isPending,
+    isLoading,
     isError,
     error,
   } = useQuery({
@@ -23,9 +23,11 @@ const OurProducts = () => {
       return res.data;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchInterval: 3000,
+    refetchIntervalInBackground: true,
   });
 
-  if (isPending) {
+  if (isLoading) {
     return <Loader></Loader>;
   }
   console.log(products);

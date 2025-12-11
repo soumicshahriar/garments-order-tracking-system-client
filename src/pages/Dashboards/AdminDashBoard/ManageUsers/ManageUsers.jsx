@@ -3,9 +3,25 @@ import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../../../hooks/useAxios";
 import { FiEdit, FiTrash2, FiUserCheck, FiUserX } from "react-icons/fi";
 import { MdAdminPanelSettings, MdSupervisorAccount } from "react-icons/md";
-import { FaUserTie } from "react-icons/fa"; // batch icon
+import { FaUserTie } from "react-icons/fa";
+import { motion, AnimatePresence } from "motion/react";
 import toast from "react-hot-toast";
 import Loader from "../../../Loader/Loader";
+
+const rowVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.05, duration: 0.4 },
+  }),
+  exit: { opacity: 0, scale: 0.95 },
+};
+
+const modalVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 20 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 const ManageUsers = () => {
   const axiosInstance = useAxios();
@@ -13,23 +29,18 @@ const ManageUsers = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [batch, setBatch] = useState("");
 
-  //   filtering state
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-
-  // search users
   const [searchEmail, setSearchEmail] = useState("");
 
-  // suspend user
   const [suspendUser, setSuspendUser] = useState(null);
   const [suspendReason, setSuspendReason] = useState("");
   const [suspendFeedback, setSuspendFeedback] = useState("");
 
-  // Fetch all users
   const {
     data: allUsers = [],
     refetch,
-    isPending,
+    isLoading,
   } = useQuery({
     queryKey: ["all-users"],
     queryFn: async () => {
@@ -38,11 +49,8 @@ const ManageUsers = () => {
     },
   });
 
-  if (isPending) {
-    return <Loader></Loader>;
-  }
+  if (isLoading) return <Loader />;
 
-  //   filtered user
   const filteredUser = allUsers.filter((user) => {
     const roleMatch = roleFilter === "all" || user.role === roleFilter;
     const statusMatch = statusFilter === "all" || user.status === statusFilter;
@@ -71,7 +79,7 @@ const ManageUsers = () => {
       setSelectedUser(null);
       setSelectedRole("");
       setBatch("");
-    } catch (error) {
+    } catch {
       toast.error("Failed to update role");
     }
   };
@@ -87,23 +95,19 @@ const ManageUsers = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this user?"
-    );
-    if (!confirmDelete) return;
+    if (!window.confirm("Are you sure?")) return;
 
     try {
       await axiosInstance.delete(`/users/${id}`);
-      toast.success("User deleted successfully");
+      toast.success("User deleted");
       refetch();
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete user");
     }
   };
 
-  // handle suspend
   const submitSuspension = async () => {
-    if (!suspendReason) return toast.error("Select a suspend reason");
+    if (!suspendReason) return toast.error("Select a reason");
 
     try {
       await axiosInstance.patch(`/users/update-status/${suspendUser._id}`, {
@@ -112,34 +116,35 @@ const ManageUsers = () => {
         feedback: suspendFeedback,
       });
 
-      toast.success("User suspended successfully");
+      toast.success("User suspended");
       refetch();
 
-      // reset modal
       setSuspendUser(null);
       setSuspendReason("");
       setSuspendFeedback("");
-    } catch (error) {
+    } catch {
       toast.error("Failed to suspend user");
     }
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-200">
-        Manage Users : ({allUsers.length}) ||{" "}
-        <span className="text-yellow-400">
-          Filtered User: ({filteredUser.length})
-        </span>
-      </h2>
+    <div className="p-4 md:p-6">
+      {/* Title */}
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-xl md:text-2xl font-semibold mb-6 text-gray-200"
+      >
+        Manage Users ({allUsers.length}) |{" "}
+        <span className="text-yellow-400">Filtered: {filteredUser.length}</span>
+      </motion.h2>
 
-      {/* Filter */}
-      <div className="flex gap-10 my-10">
-        {/* Role filter */}
+      {/* Filters */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="border-r-4 border-l-4 rounded p-1 bg-gray-700 text-base"
+          className="border rounded p-2 bg-gray-700 text-gray-200"
         >
           <option value="all">All Roles</option>
           <option value="admin">Admin</option>
@@ -147,31 +152,34 @@ const ManageUsers = () => {
           <option value="buyer">Buyer</option>
         </select>
 
-        {/* Status filter */}
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="border-r-4 border-l-4 rounded p-1 bg-gray-700 text-base"
+          className="border rounded p-2 bg-gray-700 text-gray-200"
         >
           <option value="all">All Status</option>
           <option value="pending">Pending</option>
           <option value="approved">Approved</option>
-          <option value="suspend">Suspend</option>
+          <option value="suspended">Suspended</option>
         </select>
 
-        {/* Search Email */}
         <input
           type="text"
-          placeholder="Search by email..."
+          placeholder="Search email..."
+          className="border rounded p-2 bg-gray-800 text-gray-200"
           value={searchEmail}
           onChange={(e) => setSearchEmail(e.target.value)}
-          className="input input-bordered bg-gray-800 text-gray-200 w-64"
         />
       </div>
 
-      <div className="overflow-x-auto rounded-lg shadow-lg">
+      {/* Table */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="overflow-x-auto rounded-lg shadow-lg"
+      >
         <table className="table table-zebra w-full text-gray-300">
-          <thead className="bg-gray-800 text-gray-100">
+          <thead className="bg-gray-800 text-gray-100 text-sm md:text-base">
             <tr>
               <th>#</th>
               <th>Name</th>
@@ -183,137 +191,136 @@ const ManageUsers = () => {
           </thead>
 
           <tbody>
-            {filteredUser.map((user, index) => (
-              <tr key={user._id} className="hover:bg-gray-800/60">
-                <td>{index + 1}</td>
-                <td className="font-medium">{user.name}</td>
-                <td>{user.email}</td>
+            <AnimatePresence>
+              {filteredUser.map((user, i) => (
+                <motion.tr
+                  key={user._id}
+                  custom={i}
+                  variants={rowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="hover:bg-gray-800/50"
+                >
+                  <td>{i + 1}</td>
+                  <td className="font-medium">{user.name}</td>
+                  <td>{user.email}</td>
 
-                {/* Role + Batch Icon + Edit */}
-                <td className="flex items-center gap-2 capitalize">
-                  {user.role === "admin" && (
-                    <>
-                      <MdAdminPanelSettings
-                        size={18}
-                        className="text-yellow-400"
-                      />
-                      <span>Admin</span>
-                    </>
-                  )}
-                  {user.role === "manager" && (
-                    <>
-                      <MdSupervisorAccount
-                        size={18}
-                        className="text-cyan-400"
-                      />
-                      <span>Manager</span>
-                      {user.batch && (
-                        <FaUserTie
-                          size={16}
-                          className="text-green-400 ml-1"
-                          title={`Batch: ${user.batch}`}
+                  <td className="flex items-center gap-2 capitalize">
+                    {user.role === "admin" && (
+                      <>
+                        <MdAdminPanelSettings
+                          size={18}
+                          className="text-yellow-400"
                         />
-                      )}
-                    </>
-                  )}
-                  {user.role === "buyer" && (
-                    <>
-                      <FiUserCheck size={16} className="text-gray-400" />
-                      <span>Buyer</span>
-                    </>
-                  )}
+                        <span>Admin</span>
+                      </>
+                    )}
 
-                  {/* Edit icon */}
-                  <button
-                    onClick={() => setSelectedUser(user)}
-                    className="ml-2 text-gray-300 hover:text-cyan-400"
-                    title="Edit Role"
-                  >
-                    <FiEdit size={16} />
-                  </button>
-                </td>
+                    {user.role === "manager" && (
+                      <>
+                        <MdSupervisorAccount
+                          size={18}
+                          className="text-cyan-400"
+                        />
+                        <span>Manager</span>
+                        {user.batch && (
+                          <FaUserTie size={16} className="text-green-400" />
+                        )}
+                      </>
+                    )}
 
-                <td>
-                  <span
-                    className={`badge ${
-                      user.status === "approved"
-                        ? "badge-success"
-                        : user.status === "suspended"
-                        ? "badge-error"
-                        : "badge-warning"
-                    }`}
-                  >
-                    {user.status}
-                  </span>
-                </td>
+                    {user.role === "buyer" && (
+                      <>
+                        <FiUserCheck size={16} className="text-gray-400" />
+                        <span>Buyer</span>
+                      </>
+                    )}
 
-                {/* Approve/Suspend */}
-                <td className="flex gap-2 justify-center">
-                  {/* btn approve */}
-                  <button
-                    onClick={() => handleStatusChange(user._id, "approved")}
-                    disabled={user.status === "approved"} // disable if already approved
-                    className={`btn btn-sm flex items-center gap-1 ${
-                      user.status === "approved"
-                        ? "btn-disabled cursor-not-allowed"
-                        : "btn-success"
-                    }`}
-                    title="Approve"
-                  >
-                    <FiUserCheck size={16} />
-                  </button>
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setSelectedUser(user)}
+                      className="ml-2 hover:text-cyan-400"
+                    >
+                      <FiEdit size={16} />
+                    </motion.button>
+                  </td>
 
-                  {/* button suspend */}
-                  <button
-                    onClick={() => setSuspendUser(user)}
-                    disabled={user.status === "suspended"}
-                    className={`btn btn-sm flex items-center gap-1 ${
-                      user.status === "suspended"
-                        ? "btn-disabled cursor-not-allowed"
-                        : "btn-error"
-                    }`}
-                    title="Suspend"
-                  >
-                    <FiUserX size={16} />
-                  </button>
+                  <td>
+                    <span
+                      className={`badge ${
+                        user.status === "approved"
+                          ? "badge-success"
+                          : user.status === "suspended"
+                          ? "badge-error"
+                          : "badge-warning"
+                      }`}
+                    >
+                      {user.status}
+                    </span>
+                  </td>
 
-                  {/* btn for delete */}
-                  <button
-                    onClick={() => handleDeleteUser(user._id)}
-                    className="btn btn-sm btn-warning flex items-center gap-1"
-                    title="Delete User"
-                  >
-                    <FiTrash2 size={16} className="text-black" />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  <td className="flex gap-2 justify-center flex-wrap">
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleStatusChange(user._id, "approved")}
+                      disabled={user.status === "approved"}
+                      className={`btn btn-sm ${
+                        user.status === "approved"
+                          ? "btn-disabled"
+                          : "btn-success"
+                      }`}
+                    >
+                      <FiUserCheck />
+                    </motion.button>
 
-            {filteredUser.length === 0 && (
-              <tr>
-                <td colSpan="6" className="text-center p-4 text-gray-500">
-                  No Users found.
-                </td>
-              </tr>
-            )}
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setSuspendUser(user)}
+                      disabled={user.status === "suspended"}
+                      className={`btn btn-sm ${
+                        user.status === "suspended"
+                          ? "btn-disabled"
+                          : "btn-error"
+                      }`}
+                    >
+                      <FiUserX />
+                    </motion.button>
+
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="btn btn-sm btn-warning"
+                    >
+                      <FiTrash2 className="text-black" />
+                    </motion.button>
+                  </td>
+                </motion.tr>
+              ))}
+            </AnimatePresence>
           </tbody>
         </table>
-      </div>
+      </motion.div>
 
-      {/* Role + Batch Modal */}
-      {selectedUser && (
-        <dialog open className="modal modal-bottom sm:modal-middle">
-          <div className="modal-box bg-gray-900 text-gray-200">
-            <h3 className="font-bold text-lg">
-              Update Role for {selectedUser.name}
-            </h3>
+      {/* Role Modal */}
+      <AnimatePresence>
+        {selectedUser && (
+          <dialog open className="modal modal-bottom sm:modal-middle">
+            <motion.div
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="modal-box bg-gray-900 text-gray-200"
+            >
+              <h3 className="font-bold text-lg mb-4">
+                Update Role for {selectedUser.name}
+              </h3>
 
-            <div className="mt-4 space-y-4">
-              {/* Select Role Buttons */}
-              <div className="flex flex-col gap-2">
+              <div className="space-y-3">
                 <button
                   onClick={() => setSelectedRole("admin")}
-                  className={`btn btn-outline w-full flex items-center gap-2 ${
+                  className={`btn w-full btn-outline ${
                     selectedRole === "admin" && "btn-success"
                   }`}
                 >
@@ -322,7 +329,7 @@ const ManageUsers = () => {
 
                 <button
                   onClick={() => setSelectedRole("manager")}
-                  className={`btn btn-outline w-full flex items-center gap-2 ${
+                  className={`btn w-full btn-outline ${
                     selectedRole === "manager" && "btn-success"
                   }`}
                 >
@@ -331,105 +338,94 @@ const ManageUsers = () => {
 
                 <button
                   onClick={() => setSelectedRole("buyer")}
-                  className={`btn btn-outline w-full flex items-center gap-2 ${
+                  className={`btn w-full btn-outline ${
                     selectedRole === "buyer" && "btn-success"
                   }`}
                 >
                   <FiUserCheck size={20} /> Buyer
                 </button>
-              </div>
 
-              {/* Batch input only for manager */}
-              {selectedRole === "manager" && (
-                <div>
-                  <label className="block mb-1">Batch</label>
+                {selectedRole === "manager" && (
                   <input
                     type="text"
-                    placeholder="Enter batch (e.g., B12)"
+                    placeholder="Batch (e.g. B12)"
+                    className="input input-bordered w-full bg-gray-800"
                     value={batch}
                     onChange={(e) => setBatch(e.target.value)}
-                    className="input input-bordered w-full"
                   />
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-            <div className="modal-action flex justify-between">
-              <button
-                className="btn btn-outline"
-                onClick={() => setSelectedUser(null)}
-              >
-                Cancel
-              </button>
-
-              <button className="btn btn-primary" onClick={handleUpdateRole}>
-                Update Role
-              </button>
-            </div>
-          </div>
-        </dialog>
-      )}
+              <div className="modal-action justify-between">
+                <button
+                  onClick={() => setSelectedUser(null)}
+                  className="btn btn-outline"
+                >
+                  Cancel
+                </button>
+                <button onClick={handleUpdateRole} className="btn btn-primary">
+                  Update Role
+                </button>
+              </div>
+            </motion.div>
+          </dialog>
+        )}
+      </AnimatePresence>
 
       {/* Suspend Modal */}
-      {suspendUser && (
-        <dialog open className="modal modal-bottom sm:modal-middle">
-          <div className="modal-box bg-gray-900 text-gray-200">
-            <h3 className="font-bold text-lg">
-              Suspend User: {suspendUser.name}
-            </h3>
+      <AnimatePresence>
+        {suspendUser && (
+          <dialog open className="modal modal-bottom sm:modal-middle">
+            <motion.div
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="modal-box bg-gray-900 text-gray-200"
+            >
+              <h3 className="font-bold text-lg mb-4">
+                Suspend User: {suspendUser.name}
+              </h3>
 
-            <div className="mt-4 space-y-4">
-              {/* Reason Select */}
-              <div>
-                <label className="block font-medium mb-1">Suspend Reason</label>
-                <select
-                  value={suspendReason}
-                  onChange={(e) => setSuspendReason(e.target.value)}
-                  className="select select-bordered w-full bg-gray-800"
-                >
-                  <option value="">-- Select Reason --</option>
-                  <option value="Violation of policies">
-                    Violation of policies
-                  </option>
-                  <option value="Spamming">Spamming</option>
-                  <option value="Fraudulent Activity">
-                    Fraudulent Activity
-                  </option>
-                  <option value="Non-cooperation">Non-cooperation</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              {/* Feedback Field */}
-              <div>
-                <label className="block font-medium mb-1">
-                  Additional Feedback
-                </label>
-                <textarea
-                  className="textarea textarea-bordered w-full bg-gray-800"
-                  placeholder="Write details..."
-                  value={suspendFeedback}
-                  onChange={(e) => setSuspendFeedback(e.target.value)}
-                  rows={3}
-                ></textarea>
-              </div>
-            </div>
-
-            <div className="modal-action flex justify-between">
-              <button
-                className="btn btn-outline"
-                onClick={() => setSuspendUser(null)}
+              <select
+                value={suspendReason}
+                onChange={(e) => setSuspendReason(e.target.value)}
+                className="select select-bordered w-full bg-gray-800"
               >
-                Cancel
-              </button>
+                <option value="">Select reason</option>
+                <option value="Violation of policies">
+                  Violation of policies
+                </option>
+                <option value="Spamming">Spamming</option>
+                <option value="Fraudulent Activity">Fraudulent Activity</option>
+                <option value="Non-cooperation">Non-cooperation</option>
+                <option value="Other">Other</option>
+              </select>
 
-              <button className="btn btn-error" onClick={submitSuspension}>
-                Suspend User
-              </button>
-            </div>
-          </div>
-        </dialog>
-      )}
+              <textarea
+                placeholder="Additional feedback..."
+                rows="3"
+                className="textarea textarea-bordered w-full bg-gray-800 mt-3"
+                value={suspendFeedback}
+                onChange={(e) => setSuspendFeedback(e.target.value)}
+              ></textarea>
+
+              <div className="modal-action justify-between">
+                <button
+                  onClick={() => setSuspendUser(null)}
+                  className="btn btn-outline"
+                >
+                  Cancel
+                </button>
+
+                <button onClick={submitSuspension} className="btn btn-error">
+                  Suspend
+                </button>
+              </div>
+            </motion.div>
+          </dialog>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

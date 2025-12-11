@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import Loader from "../Loader/Loader";
 import useSuspend from "../../hooks/useSuspend";
 
+// 🆕 Framer Motion Import
+import { motion } from "motion/react";
+
 const OrderForm = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -14,12 +17,8 @@ const OrderForm = () => {
   const navigate = useNavigate();
 
   const { status } = useSuspend();
-  console.log("status", status);
 
-  // ============================
-  //  Fetch Product by ID
-  // ============================
-  const { data: product = [], isPending } = useQuery({
+  const { data: product = [], isLoading } = useQuery({
     queryKey: ["single-product", id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/single-products/${id}`);
@@ -27,36 +26,25 @@ const OrderForm = () => {
     },
   });
 
-  // ============================
-  // React Hook Form Setup
-  // ============================
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
 
-  // ----------------------------
-  // Quantity state
-  // ----------------------------
   const [quantity, setQuantity] = useState(0);
 
-  // Set initial quantity when product loads
   useEffect(() => {
     if (product?.minimumOrderQuantity) {
       setQuantity(product.minimumOrderQuantity);
     }
   }, [product]);
 
-  // Total Price Calculation
   const price = product?.price || 0;
   const totalPrice = price * quantity;
 
-  // Quantity Handler
   const handleQuantityChange = (e) => {
     const value = Number(e.target.value);
-
     if (
       value >= product.minimumOrderQuantity &&
       value <= product.availableQuantity
@@ -65,9 +53,6 @@ const OrderForm = () => {
     }
   };
 
-  // ============================
-  // Submit Order
-  // ============================
   const onSubmit = async (data) => {
     const orderInfo = {
       ...data,
@@ -78,164 +63,193 @@ const OrderForm = () => {
       productId: product._id,
       productTitle: product.title,
     };
-    console.log(orderInfo);
 
     const res = await axiosInstance.post("/orders", orderInfo);
-    console.log(res.data);
+
     if (res.data.paymentRequired) {
       const sessionRes = await axiosInstance.post("/create-payment-session", {
         orderId: res.data.orderId,
       });
 
-      // Redirect to Stripe Checkout
       window.location.assign(sessionRes.data.url);
       return;
     } else {
-      // no payment--> order completed
       navigate("/dashboard/my-orders");
     }
   };
 
-  if (isPending) {
-    return <Loader></Loader>;
+  if (isLoading) {
+    return <Loader />;
   }
 
+  // --------------------------
+  // Framer motion variants
+  // --------------------------
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        when: "beforeChildren",
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  };
+
   return (
-    <div>
-      <div className="max-w-2xl mx-auto  bg-gray-900 text-white rounded border p-4">
-        <h2 className="text-2xl font-bold mb-6">Place Your Order</h2>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="max-w-2xl mx-auto bg-gray-900 text-white rounded border p-4 mt-5"
+    >
+      <motion.h2 variants={itemVariants} className="text-2xl font-bold mb-6">
+        Place Your Order
+      </motion.h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Email */}
-          <div>
-            <label className="block mb-1 font-medium">Email</label>
-            <input
-              type="email"
-              readOnly
-              value={user?.email}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-          </div>
+      <motion.form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-4"
+        variants={containerVariants}
+      >
+        {/* Email */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Email</label>
+          <input
+            type="email"
+            readOnly
+            value={user?.email}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+        </motion.div>
 
-          {/* Product Title */}
-          <div>
-            <label className="block mb-1 font-medium">Product Title</label>
-            <input
-              type="text"
-              readOnly
-              defaultValue={product?.title}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-          </div>
+        {/* Product Title */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Product Title</label>
+          <input
+            type="text"
+            readOnly
+            defaultValue={product?.title}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+        </motion.div>
 
-          {/* Price */}
-          <div>
-            <label className="block mb-1 font-medium">Price</label>
-            <input
-              type="number"
-              readOnly
-              defaultValue={product?.price}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-          </div>
+        {/* Price */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Price</label>
+          <input
+            type="number"
+            readOnly
+            defaultValue={product?.price}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+        </motion.div>
 
-          {/* Quantity */}
-          <div>
-            <label className="block mb-1 font-medium">Order Quantity</label>
-            <input
-              type="number"
-              value={quantity}
-              onChange={handleQuantityChange}
-              className="w-full p-2 rounded bg-gray-800"
-              min={product.minimumOrderQuantity}
-              max={product.availableQuantity}
-            />
+        {/* Quantity */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Order Quantity</label>
+          <input
+            type="number"
+            value={quantity}
+            onChange={handleQuantityChange}
+            className="w-full p-2 rounded bg-gray-800"
+            min={product.minimumOrderQuantity}
+            max={product.availableQuantity}
+          />
+          <p className="text-sm text-gray-400">
+            Min: {product.minimumOrderQuantity} — Max:{" "}
+            {product.availableQuantity}
+          </p>
+        </motion.div>
 
-            <p className="text-sm text-gray-400">
-              Min: {product.minimumOrderQuantity} — Max:{" "}
-              {product.availableQuantity}
-            </p>
-          </div>
+        {/* Total Price */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Total Price</label>
+          <input
+            type="number"
+            readOnly
+            value={totalPrice}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+        </motion.div>
 
-          {/* Total Price */}
-          <div>
-            <label className="block mb-1 font-medium">Total Price</label>
-            <input
-              type="number"
-              readOnly
-              value={totalPrice}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-          </div>
+        {/* First Name */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">First Name</label>
+          <input
+            {...register("firstName", { required: true })}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+          {errors.firstName && (
+            <p className="text-red-400">First name is required</p>
+          )}
+        </motion.div>
 
-          {/* First Name */}
-          <div>
-            <label className="block mb-1 font-medium">First Name</label>
-            <input
-              {...register("firstName", { required: true })}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-            {errors.firstName && (
-              <p className="text-red-400">First name is required</p>
-            )}
-          </div>
+        {/* Last Name */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Last Name</label>
+          <input
+            {...register("lastName", { required: true })}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+          {errors.lastName && (
+            <p className="text-red-400">Last name is required</p>
+          )}
+        </motion.div>
 
-          {/* Last Name */}
-          <div>
-            <label className="block mb-1 font-medium">Last Name</label>
-            <input
-              {...register("lastName", { required: true })}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-            {errors.lastName && (
-              <p className="text-red-400">Last name is required</p>
-            )}
-          </div>
+        {/* Contact */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Contact Number</label>
+          <input
+            {...register("contact", { required: true })}
+            className="w-full p-2 rounded bg-gray-800"
+          />
+          {errors.contact && (
+            <p className="text-red-400">Contact number is required</p>
+          )}
+        </motion.div>
 
-          {/* Contact Number */}
-          <div>
-            <label className="block mb-1 font-medium">Contact Number</label>
-            <input
-              {...register("contact", { required: true })}
-              className="w-full p-2 rounded bg-gray-800"
-            />
-            {errors.contact && (
-              <p className="text-red-400">Contact number is required</p>
-            )}
-          </div>
+        {/* Address */}
+        <motion.div variants={itemVariants}>
+          <label className="block mb-1 font-medium">Delivery Address</label>
+          <textarea
+            {...register("address", { required: true })}
+            className="w-full p-2 rounded bg-gray-800"
+          ></textarea>
+          {errors.address && (
+            <p className="text-red-400">Address is required</p>
+          )}
+        </motion.div>
 
-          {/* Delivery Address */}
-          <div>
-            <label className="block mb-1 font-medium">Delivery Address</label>
-            <textarea
-              {...register("address", { required: true })}
-              className="w-full p-2 rounded bg-gray-800"
-            ></textarea>
-            {errors.address && (
-              <p className="text-red-400">Address is required</p>
-            )}
-          </div>
-
-          {/* Submit */}
+        {/* Submit Button */}
+        <motion.div variants={itemVariants}>
           {status === "suspended" ? (
-            <button
-              type="submit"
-              className="w-full py-2 bg-gray-600 rounded  duration-300"
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              className="w-full py-2 bg-gray-600 rounded"
               disabled
             >
               You Are Suspended
-            </button>
+            </motion.button>
           ) : (
-            <button
-              type="submit"
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
               className="w-full py-2 bg-blue-600 rounded hover:bg-blue-700 duration-300"
             >
               Confirm Order
-            </button>
+            </motion.button>
           )}
-        </form>
-      </div>
-    </div>
+        </motion.div>
+      </motion.form>
+    </motion.div>
   );
 };
 

@@ -3,6 +3,7 @@ import useAuth from "../../../../hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxios from "../../../../hooks/useAxios";
 import { Link } from "react-router";
+import { motion, AnimatePresence } from "motion/react";
 
 const MyOrders = () => {
   const { user } = useAuth();
@@ -24,19 +25,40 @@ const MyOrders = () => {
     const res = await axiosInstance.delete(`/orders/${id}`);
     if (res.data.deletedCount > 0) {
       setSelectedOrderId(null);
-
-      // Refresh orders without reloading page
       queryClient.invalidateQueries(["myOrders", user.email]);
     }
   };
 
-  if (isLoading) return <p className="p-4">Loading your orders...</p>;
+  if (isLoading)
+    return (
+      <p className="p-4 text-center text-gray-300">Loading your orders...</p>
+    );
+
+  // Motion variants
+  const rowVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 },
+  };
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  };
 
   return (
     <div className="p-5">
-      <h2 className="text-2xl font-semibold mb-4">
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-2xl font-semibold mb-4"
+      >
         My Orders : ({myOrders.length})
-      </h2>
+      </motion.h2>
 
       {/* Table */}
       <div className="overflow-x-auto shadow rounded-lg">
@@ -53,79 +75,109 @@ const MyOrders = () => {
             </tr>
           </thead>
 
-          <tbody>
+          <motion.tbody
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.05 } },
+            }}
+          >
             {myOrders.map((order) => (
-              <tr key={order._id} className="text-center">
+              <motion.tr
+                key={order._id}
+                className="text-center hover:bg-gray-500/50"
+                variants={rowVariants}
+              >
                 <td className="border p-2">{order._id}</td>
                 <td className="border p-2">{order.productTitle}</td>
                 <td className="border p-2">{order.quantity}</td>
                 <td className="border p-2 capitalize">{order.status}</td>
                 <td className="border p-2 capitalize">{order.orderStatus}</td>
                 <td className="border p-2">{order.paymentMethod}</td>
-
-                <td className="border p-2 space-x-2">
-                  {/* View Button */}
+                <td className="border p-2 space-x-2 grid grid-cols-1 md:grid-cols-2 gap-2">
                   <Link
                     to={`/dashboard/track-order/${order._id}`}
-                    className="px-3 py-1 bg-blue-500 text-white rounded"
+                    className=" bg-blue-500 text-white rounded"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
                   >
                     View
                   </Link>
 
-                  {/* Cancel Button */}
                   {order.status === "pending" && (
-                    <>
-                      <button
-                        className="px-3 py-1 bg-red-500 text-white rounded"
-                        onClick={() => setSelectedOrderId(order._id)}
-                      >
-                        Cancel
-                      </button>
-                    </>
+                    <motion.button
+                      className=" bg-red-500 text-white rounded"
+                      onClick={() => setSelectedOrderId(order._id)}
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      Cancel
+                    </motion.button>
                   )}
                 </td>
-              </tr>
+              </motion.tr>
             ))}
 
             {myOrders.length === 0 && (
               <tr>
-                <td colSpan="6" className="text-center p-4 text-gray-500">
+                <td colSpan="7" className="text-center p-4 text-gray-500">
                   No orders found.
                 </td>
               </tr>
             )}
-          </tbody>
+          </motion.tbody>
         </table>
       </div>
 
       {/* Cancel Confirmation Modal */}
-      {selectedOrderId && (
-        <div className="fixed inset-0 bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-cyan-900 border border-cyan-300 p-6 rounded shadow-lg w-80">
-            <h3 className="text-xl font-semibold mb-2">Cancel Order?</h3>
-            <p className="mb-4">
-              Are you sure you want to cancel this order? This action cannot be
-              undone.
-            </p>
+      <AnimatePresence>
+        {selectedOrderId && (
+          <motion.div
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-cyan-900 border border-cyan-300 p-6 rounded shadow-lg w-80"
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <h3 className="text-xl font-semibold mb-2">Cancel Order?</h3>
+              <p className="mb-4">
+                Are you sure you want to cancel this order? This action cannot
+                be undone.
+              </p>
 
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setSelectedOrderId(null)}
-                className="px-3 py-1 cursor-pointer border rounded"
-              >
-                ×
-              </button>
+              <div className="flex justify-end gap-3">
+                <motion.button
+                  onClick={() => setSelectedOrderId(null)}
+                  className="px-3 py-1 cursor-pointer border rounded"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  ×
+                </motion.button>
 
-              <button
-                onClick={() => handleCancel(selectedOrderId)}
-                className="px-3 py-1 bg-red-600 text-white rounded cursor-pointer hover:shadow-lg hover:shadow-red-500"
-              >
-                Confirm Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <motion.button
+                  onClick={() => handleCancel(selectedOrderId)}
+                  className="px-3 py-1 bg-red-600 text-white rounded cursor-pointer hover:shadow-lg hover:shadow-red-500"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  Confirm Cancel
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

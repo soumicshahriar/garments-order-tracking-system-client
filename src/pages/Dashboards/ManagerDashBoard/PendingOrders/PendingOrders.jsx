@@ -4,6 +4,7 @@ import useAxios from "../../../../hooks/useAxios";
 import Loader from "../../../Loader/Loader";
 import Swal from "sweetalert2";
 import useAuth from "../../../../hooks/useAuth";
+import { motion, AnimatePresence } from "motion/react";
 
 const PendingOrders = () => {
   const axiosInstance = useAxios();
@@ -11,20 +12,18 @@ const PendingOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const { user } = useAuth();
 
-  // Fetch users
-  const { data: users = [], isPending } = useQuery({
+  const { data: users = [], isLoading } = useQuery({
     queryKey: ["users", user?.email],
     queryFn: async () => {
       const res = await axiosInstance.get(`/users?email=${user.email}`);
       return res.data;
     },
-    refetchInterval: 3000, // 🔥 Auto update every 3 sec
-    refetchIntervalInBackground: true, // Works even if tab not focused
+    refetchInterval: 3000,
+    refetchIntervalInBackground: true,
   });
-  const userStatus = users[0];
-  console.log(userStatus);
 
-  // Fetch all pending orders
+  const userStatus = users[0];
+
   const { data: pendingOrder = [], refetch: refetchPendingOrders } = useQuery({
     queryKey: ["pendingOrders", "Pending"],
     queryFn: async () => {
@@ -35,13 +34,11 @@ const PendingOrders = () => {
     },
   });
 
-  // Approve order mutation
   const approveMutation = useMutation({
     mutationFn: async (id) =>
       axiosInstance.patch(`/orders/approve/${id}`, {
         orderStatus: "Approved",
       }),
-
     onSuccess: () => {
       Swal.fire({
         title: "Approved!",
@@ -54,13 +51,11 @@ const PendingOrders = () => {
     },
   });
 
-  // Reject order mutation
   const rejectMutation = useMutation({
     mutationFn: async (id) =>
       axiosInstance.patch(`/orders/reject/${id}`, {
         orderStatus: "Rejected",
       }),
-
     onSuccess: () => {
       Swal.fire({
         title: "Rejected!",
@@ -73,22 +68,41 @@ const PendingOrders = () => {
     },
   });
 
-  // Open modal
   const openModal = (order) => {
     setSelectedOrder(order);
     modalRef.current.showModal();
   };
 
-  // loading
-  if (isPending) return <Loader />;
+  if (isLoading) return <Loader />;
+
+  // Motion Variants
+  const rowVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+    exit: { opacity: 0, x: -50, transition: { duration: 0.2 } },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05, boxShadow: "0px 0px 8px rgba(255,255,255,0.6)" },
+    tap: { scale: 0.95 },
+  };
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.2 } },
+  };
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">
+      <motion.h2
+        className="text-xl font-bold mb-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
         Pending Orders : ({pendingOrder.length})
-      </h2>
+      </motion.h2>
 
-      {/* TABLE */}
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead className="bg-gray-900 text-white">
@@ -105,108 +119,146 @@ const PendingOrders = () => {
           </thead>
 
           <tbody>
-            {pendingOrder.map((order) => (
-              <tr key={order._id} className="border-b">
-                <td>{order._id}</td>
-                <td>{order.buyerEmail}</td>
-                <td>{order.productTitle}</td>
-                <td>{order.quantity}</td>
-                <td>{new Date(order.orderTime).toLocaleDateString()}</td>
-                <td>{order.paymentMethod}</td>
-                <td>{order.status}</td>
-
-                <td className="flex gap-2">
-                  {userStatus.status === "suspended" ? (
-                    <>
-                      <button
-                        disabled
-                        className="btn btn-xs bg-gray-600 text-white"
-                      >
-                        Approve
-                      </button>
-
-                      <button
-                        disabled
-                        className="btn btn-xs bg-gray-600 text-white"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => approveMutation.mutate(order._id)}
-                        className="btn btn-xs bg-green-600 text-white"
-                      >
-                        Approve
-                      </button>
-
-                      <button
-                        onClick={() => rejectMutation.mutate(order._id)}
-                        className="btn btn-xs bg-red-600 text-white"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-
-                  <button
-                    onClick={() => openModal(order)}
-                    className="btn btn-xs bg-blue-600 text-white"
+            <AnimatePresence>
+              {pendingOrder.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="text-center p-4 text-gray-500">
+                    No Pending orders found.
+                  </td>
+                </tr>
+              ) : (
+                pendingOrder.map((order) => (
+                  <motion.tr
+                    key={order._id}
+                    className="border-b"
+                    variants={rowVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
                   >
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    <td>{order._id}</td>
+                    <td>{order.buyerEmail}</td>
+                    <td>{order.productTitle}</td>
+                    <td>{order.quantity}</td>
+                    <td>{new Date(order.orderTime).toLocaleDateString()}</td>
+                    <td>{order.paymentMethod}</td>
+                    <td>{order.status}</td>
 
-            {pendingOrder.length === 0 && (
-              <tr>
-                <td colSpan="6" className="text-center p-4 text-gray-500">
-                  No Pending orders found.
-                </td>
-              </tr>
-            )}
+                    <td className="flex gap-2 flex-wrap">
+                      {userStatus.status === "suspended" ? (
+                        <>
+                          <motion.button
+                            disabled
+                            className="btn btn-xs bg-gray-600 text-white"
+                            whileHover="hover"
+                            whileTap="tap"
+                          >
+                            Approve
+                          </motion.button>
+
+                          <motion.button
+                            disabled
+                            className="btn btn-xs bg-gray-600 text-white"
+                            whileHover="hover"
+                            whileTap="tap"
+                          >
+                            Reject
+                          </motion.button>
+                        </>
+                      ) : (
+                        <>
+                          <motion.button
+                            onClick={() => approveMutation.mutate(order._id)}
+                            className="btn btn-xs bg-green-600 text-white"
+                            variants={buttonVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                          >
+                            Approve
+                          </motion.button>
+
+                          <motion.button
+                            onClick={() => rejectMutation.mutate(order._id)}
+                            className="btn btn-xs bg-red-600 text-white"
+                            variants={buttonVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                          >
+                            Reject
+                          </motion.button>
+                        </>
+                      )}
+
+                      <motion.button
+                        onClick={() => openModal(order)}
+                        className="btn btn-xs bg-blue-600 text-white"
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                      >
+                        View
+                      </motion.button>
+                    </td>
+                  </motion.tr>
+                ))
+              )}
+            </AnimatePresence>
           </tbody>
         </table>
       </div>
 
-      {/* VIEW MODAL */}
-      <dialog ref={modalRef} className="modal">
-        <div className="modal-box bg-linear-to-br from-gray-900 to-gray-700 text-white">
-          <h3 className="text-lg font-bold mb-3">Order Details</h3>
+      <AnimatePresence>
+        {selectedOrder && (
+          <motion.dialog
+            ref={modalRef}
+            className="modal"
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <motion.div className="modal-box bg-linear-to-br from-gray-900 to-gray-700 text-white">
+              <h3 className="text-lg font-bold mb-3">Order Details</h3>
 
-          {selectedOrder && (
-            <div className="space-y-2">
-              <p>
-                <span className="font-bold">Order ID:</span> {selectedOrder._id}
-              </p>
-              <p>
-                <span className="font-bold">User:</span>{" "}
-                {selectedOrder.buyerEmail}
-              </p>
-              <p>
-                <span className="font-bold">Product:</span>{" "}
-                {selectedOrder.productTitle}
-              </p>
-              <p>
-                <span className="font-bold">Quantity:</span>{" "}
-                {selectedOrder.quantity}
-              </p>
-              <p>
-                <span className="font-bold">Status:</span>{" "}
-                {selectedOrder.orderStatus}
-              </p>
-            </div>
-          )}
+              {selectedOrder && (
+                <div className="space-y-2">
+                  <p>
+                    <span className="font-bold">Order ID:</span>{" "}
+                    {selectedOrder._id}
+                  </p>
+                  <p>
+                    <span className="font-bold">User:</span>{" "}
+                    {selectedOrder.buyerEmail}
+                  </p>
+                  <p>
+                    <span className="font-bold">Product:</span>{" "}
+                    {selectedOrder.productTitle}
+                  </p>
+                  <p>
+                    <span className="font-bold">Quantity:</span>{" "}
+                    {selectedOrder.quantity}
+                  </p>
+                  <p>
+                    <span className="font-bold">Status:</span>{" "}
+                    {selectedOrder.orderStatus}
+                  </p>
+                </div>
+              )}
 
-          <div className="modal-action">
-            <button className="btn" onClick={() => modalRef.current.close()}>
-              Close
-            </button>
-          </div>
-        </div>
-      </dialog>
+              <div className="modal-action">
+                <motion.button
+                  className="btn"
+                  onClick={() => modalRef.current.close()}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Close
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.dialog>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

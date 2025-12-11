@@ -4,111 +4,159 @@ import { Link, useParams } from "react-router";
 import useAxios from "../../hooks/useAxios";
 import "./ProductDetails.css";
 import useAuth from "../../hooks/useAuth";
+import Loader from "../Loader/Loader";
+import { motion } from "motion/react";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 const ProductDetails = () => {
   const { user } = useAuth();
-  console.log(user);
 
   const axiosInstance = useAxios();
   const { id } = useParams();
-  // const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
 
   // get user by email
-  const { data: userData = [] } = useQuery({
+  const { data: userData = [], isLoading } = useQuery({
     queryKey: ["users", user?.email],
     queryFn: async () => {
       const res = await axiosInstance.get(`/users?email=${user.email}`);
       return res.data;
     },
   });
-  // console.log("user data", [userData]);
+
   const userObj = userData[0] || {};
 
-  const {
-    data: product = [],
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: product = [], error } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/all-products/${id}`);
       return res.data;
     },
   });
-  console.log(product);
 
-  if (isLoading) {
-    return <div className="loading">Loading product details...</div>;
-  }
-
-  if (error) {
-    return <div className="error">Error loading product details</div>;
-  }
-
-  if (!product._id) {
-    return <div className="error">Product not found</div>;
-  }
+  if (isLoading) return <Loader />;
+  if (error) return <div className="error">Error loading product details</div>;
+  if (!product._id) return <div className="error">Product not found</div>;
 
   const images = product.images || [product.image];
   const currentImage = images[selectedImage] || product.image;
 
   return (
-    <div className="product-details-container">
+    <motion.div
+      className="product-details-container"
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp}
+    >
       {/* Product Images Section */}
-      <div className="product-images-section">
-        <div className="main-image">
+      <motion.div
+        className="product-images-section"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7 }}
+      >
+        {/* Main Image */}
+        <motion.div
+          className="main-image"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
           {product.demoVideo ? (
-            <iframe
+            <motion.iframe
               width="100%"
               height="400"
               src={product.demoVideo}
               title="Product Demo"
               frameBorder="0"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-            ></iframe>
+            ></motion.iframe>
           ) : (
-            <img src={currentImage} alt={product.title} />
+            <motion.img
+              src={currentImage}
+              alt={product.title}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
+            />
           )}
-        </div>
+        </motion.div>
 
-        {/* Thumbnail Gallery */}
+        {/* Thumbnails */}
         {images.length > 1 && (
-          <div className="image-thumbnails">
+          <motion.div
+            className="image-thumbnails"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
             {images.map((img, index) => (
-              <img
+              <motion.img
                 key={index}
                 src={img}
                 alt={`${product.title}-${index}`}
                 className={`thumbnail ${
                   selectedImage === index ? "active" : ""
                 }`}
+                whileHover={{ scale: 1.15 }}
                 onClick={() => setSelectedImage(index)}
               />
             ))}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
 
       {/* Product Information Section */}
-      <div className="product-info-section">
-        {/* Product Name */}
-        <h1 className="product-title">{product.title}</h1>
+      <motion.div
+        className="product-info-section"
+        initial={{ opacity: 0, x: 60 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        {/* Product Title */}
+        <motion.h1
+          className="product-title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          {product.title}
+        </motion.h1>
 
         {/* Category */}
-        <p className="product-category">
+        <motion.p
+          className="product-category"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           <span className="label">Category:</span> {product.category}
-        </p>
+        </motion.p>
 
         {/* Description */}
-        <div className="product-description">
+        <motion.div
+          className="product-description"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
           <h3>Description</h3>
           <p>{product.description}</p>
-        </div>
+        </motion.div>
 
-        {/* Product Details Grid */}
-        <div className="product-details-grid">
+        {/* Details Grid */}
+        <motion.div
+          className="product-details-grid"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
           <div className="detail-item">
             <span className="detail-label">Price</span>
             <span className="detail-value price">${product.price}</span>
@@ -127,33 +175,51 @@ const ProductDetails = () => {
               {product.minimumOrderQuantity} units
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Payment Options */}
         {product.paymentOption && product.paymentOption.length > 0 && (
-          <div className="payment-options">
+          <motion.div
+            className="payment-options"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
             <h3>Payment Options</h3>
             <ul className="payment-list">{product.paymentOption}</ul>
-          </div>
+          </motion.div>
         )}
 
         {/* Order Button */}
         {userObj?.role === "buyer" && (
-          <Link
-            to={`/order-form/${product._id}`}
-            className="order-button text-center"
-            // onClick={handleOrder}
-            disabled={product.availableQuantity < product.minimumOrderQuantity}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
           >
-            Order Now
-          </Link>
+            <Link
+              to={`/order-form/${product._id}`}
+              className="order-button text-center"
+              disabled={
+                product.availableQuantity < product.minimumOrderQuantity
+              }
+            >
+              Order Now
+            </Link>
+          </motion.div>
         )}
 
         {product.availableQuantity < product.minimumOrderQuantity && (
-          <p className="out-of-stock">Out of Stock</p>
+          <motion.p
+            className="out-of-stock"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Out of Stock
+          </motion.p>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

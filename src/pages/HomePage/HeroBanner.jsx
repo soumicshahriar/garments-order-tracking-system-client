@@ -5,11 +5,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useState, useRef } from "react";
 import { Link } from "react-router";
-import { motion } from "framer-motion";
-import "./HeroBanner.css";
+import { motion } from "motion/react";
+import Loader from "../Loader/Loader";
 
-const HeroBanner = ({ allProducts = [] }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const HeroBanner = ({ allProducts = [], isLoading }) => {
+  const [, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
 
   const fallback = [
@@ -48,22 +48,12 @@ const HeroBanner = ({ allProducts = [] }) => {
           imagePeek: f.image,
         }));
 
+  if (isLoading) {
+    return <Loader></Loader>;
+  }
+
   return (
     <div className="p-4 max-w-7xl mx-auto relative">
-      {/* 🌟 FLOATING ICONS */}
-      {/* <motion.img
-        src="https://cdn-icons-png.flaticon.com/512/4341/4341054.png"
-        className="w-12 h-12 absolute top-20 left-8 opacity-40"
-        animate={{ y: [0, -15, 0] }}
-        transition={{ duration: 4, repeat: Infinity }}
-      /> */}
-      {/* <motion.img
-        src="https://cdn-icons-png.flaticon.com/512/2991/2991108.png"
-        className="w-10 h-10 absolute top-40 right-6 opacity-40"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 5, repeat: Infinity }}
-      /> */}
-
       <motion.div
         className="bg-black/20 rounded-lg mt-10"
         initial={{ opacity: 0 }}

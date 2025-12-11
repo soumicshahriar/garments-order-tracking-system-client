@@ -2,7 +2,7 @@ import React from "react";
 
 const Loader = () => {
   return (
-    <div>
+    <div className="bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center ">

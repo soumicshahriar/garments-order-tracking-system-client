@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Loader from "../../../Loader/Loader";
 import useAxios from "../../../../hooks/useAxios";
 
@@ -8,7 +8,7 @@ const TrackOrders = () => {
   const axiosInstance = useAxios();
   const { orderId } = useParams();
 
-  const { data: orderData = {}, isPending } = useQuery({
+  const { data: orderData = {}, isLoading } = useQuery({
     queryKey: ["trackOrder", orderId],
     queryFn: async () => {
       const res = await axiosInstance.get(`/orders/${orderId}`);
@@ -16,7 +16,7 @@ const TrackOrders = () => {
     },
   });
 
-  if (isPending) return <Loader />;
+  if (isLoading) return <Loader />;
 
   const tracking = orderData?.tracking || [];
   const latestStepIndex = tracking.length - 1;

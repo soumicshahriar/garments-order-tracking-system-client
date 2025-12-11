@@ -20,6 +20,7 @@ import TrackOrders from "../pages/Dashboards/BuyerDashBoard/TrackOrders/TrackOrd
 import OrderDetails from "../pages/Dashboards/AdminDashBoard/OrderDetails/OrderDetails";
 import MyProfile from "../pages/Dashboards/MyProfile/MyProfile";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       // admin route
-      
+
       { path: "manage-users", Component: ManageUsers },
       { path: "all-products", Component: Products },
       { path: "all-orders", Component: AllOrders },
@@ -63,5 +64,9 @@ export const router = createBrowserRouter([
       // common profile
       { path: "profile", Component: MyProfile },
     ],
+  },
+  {
+    path: "*",
+    Component: NotFoundPage,
   },
 ]);
