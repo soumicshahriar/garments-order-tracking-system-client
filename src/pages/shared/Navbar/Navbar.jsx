@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
-import { FaUserCircle, FaShoppingBag, FaSignOutAlt } from "react-icons/fa";
+import { FaShoppingBag, FaSignOutAlt } from "react-icons/fa";
 import { MdDashboard, MdHome, MdContactMail } from "react-icons/md";
 import { BiSolidShoppingBags } from "react-icons/bi";
 import { FiLogIn } from "react-icons/fi";
 import { IoPersonAddSharp } from "react-icons/io5";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
+import useRole from "../../../hooks/useRole";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [user] = useState(false);
   const { user, logOut } = useAuth();
 
   console.log("user", user);
   const navigate = useNavigate();
+  const { role } = useRole();
+  console.log(role);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -27,7 +29,24 @@ const Navbar = () => {
     { label: "All Product", href: "/all-products", icon: BiSolidShoppingBags },
     { label: "About Us", href: "/about", icon: FaShoppingBag },
     { label: "Contact", href: "/contact", icon: MdContactMail },
-    user && { label: "Dashboard", href: "/dashboard", icon: MdDashboard },
+    user &&
+      role === "admin" && {
+        label: "Dashboard",
+        href: "/dashboard/admin-dashboard",
+        icon: MdDashboard,
+      },
+    user &&
+      role === "manager" && {
+        label: "Dashboard",
+        href: "/dashboard/manage-products",
+        icon: MdDashboard,
+      },
+    user &&
+      role === "buyer" && {
+        label: "Dashboard",
+        href: "/dashboard/my-orders",
+        icon: MdDashboard,
+      },
   ].filter(Boolean);
 
   const handleLogOut = () => {

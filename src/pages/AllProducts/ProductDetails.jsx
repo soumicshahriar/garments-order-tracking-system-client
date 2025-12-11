@@ -5,7 +5,8 @@ import useAxios from "../../hooks/useAxios";
 import "./ProductDetails.css";
 import useAuth from "../../hooks/useAuth";
 import Loader from "../Loader/Loader";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
+import useTitle from "../../hooks/useTitle";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -13,6 +14,7 @@ const fadeUp = {
 };
 
 const ProductDetails = () => {
+  useTitle("Product Details");
   const { user } = useAuth();
 
   const axiosInstance = useAxios();

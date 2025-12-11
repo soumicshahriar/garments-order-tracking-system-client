@@ -4,9 +4,10 @@ import useAxios from "../../../../hooks/useAxios";
 import { FiEdit, FiTrash2, FiUserCheck, FiUserX } from "react-icons/fi";
 import { MdAdminPanelSettings, MdSupervisorAccount } from "react-icons/md";
 import { FaUserTie } from "react-icons/fa";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import Loader from "../../../Loader/Loader";
+import useTitle from "../../../../hooks/useTitle";
 
 const rowVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -24,6 +25,7 @@ const modalVariants = {
 };
 
 const ManageUsers = () => {
+  useTitle("Manage Users");
   const axiosInstance = useAxios();
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");

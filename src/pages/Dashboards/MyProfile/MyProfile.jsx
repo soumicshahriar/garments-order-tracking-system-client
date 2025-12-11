@@ -4,9 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../../hooks/useAxios";
 import Loader from "../../Loader/Loader";
 import { useNavigate } from "react-router";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
+import useTitle from "../../../hooks/useTitle";
 
 const MyProfile = () => {
+  useTitle("My Profile");
   const { user, logOut } = useAuth();
   const axiosInstance = useAxios();
   const navigate = useNavigate();

@@ -3,9 +3,11 @@ import useAuth from "../../../../hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxios from "../../../../hooks/useAxios";
 import { Link } from "react-router";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
+import useTitle from "../../../../hooks/useTitle";
 
 const MyOrders = () => {
+  useTitle("My Orders");
   const { user } = useAuth();
   const axiosInstance = useAxios();
   const queryClient = useQueryClient();

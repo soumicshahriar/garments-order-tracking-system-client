@@ -4,8 +4,9 @@ import useAxios from "../../../../hooks/useAxios";
 import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import Loader from "../../../Loader/Loader";
+import useTitle from "../../../../hooks/useTitle";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -17,6 +18,7 @@ const fadeInUp = {
 };
 
 const Products = () => {
+  useTitle("Products");
   const axiosInstance = useAxios();
 
   const modalRef = useRef(null);

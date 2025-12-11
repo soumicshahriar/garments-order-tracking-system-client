@@ -4,9 +4,11 @@ import useAxios from "../../../../hooks/useAxios";
 import Loader from "../../../Loader/Loader";
 import Swal from "sweetalert2";
 import useAuth from "../../../../hooks/useAuth";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
+import useTitle from "../../../../hooks/useTitle";
 
 const PendingOrders = () => {
+  useTitle("Pending Orders");
   const axiosInstance = useAxios();
   const modalRef = useRef();
   const [selectedOrder, setSelectedOrder] = useState(null);

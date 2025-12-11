@@ -21,6 +21,7 @@ import OrderDetails from "../pages/Dashboards/AdminDashBoard/OrderDetails/OrderD
 import MyProfile from "../pages/Dashboards/MyProfile/MyProfile";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
+import AdminDashboard from "../pages/Dashboards/AdminDashBoard/AdminDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,7 @@ export const router = createBrowserRouter([
     children: [
       // admin route
 
+      { path: "admin-dashboard", Component: AdminDashboard },
       { path: "manage-users", Component: ManageUsers },
       { path: "all-products", Component: Products },
       { path: "all-orders", Component: AllOrders },

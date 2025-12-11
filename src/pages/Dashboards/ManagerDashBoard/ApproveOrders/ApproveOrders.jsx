@@ -2,8 +2,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import React, { useRef, useState } from "react";
 import useAxios from "../../../../hooks/useAxios";
 import Swal from "sweetalert2";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import Loader from "../../../Loader/Loader";
+import useTitle from "../../../../hooks/useTitle";
 
 // FIXED ORDER OF TRACKING STEPS
 const TRACKING_STEPS = [
@@ -17,6 +18,7 @@ const TRACKING_STEPS = [
 ];
 
 const ApproveOrders = () => {
+  useTitle("Approve Orders");
   const axiosInstance = useAxios();
 
   const addTrackingModalRef = useRef();

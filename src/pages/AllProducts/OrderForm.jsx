@@ -8,9 +8,11 @@ import Loader from "../Loader/Loader";
 import useSuspend from "../../hooks/useSuspend";
 
 // 🆕 Framer Motion Import
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
+import useTitle from "../../hooks/useTitle";
 
 const OrderForm = () => {
+  useTitle("Order Form");
   const { id } = useParams();
   const { user } = useAuth();
   const axiosInstance = useAxios();

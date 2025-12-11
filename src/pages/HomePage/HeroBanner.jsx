@@ -5,7 +5,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useState, useRef } from "react";
 import { Link } from "react-router";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import Loader from "../Loader/Loader";
 
 const HeroBanner = ({ allProducts = [], isLoading }) => {

@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import useAxios from "../../../../hooks/useAxios";
 import Loader from "../../../Loader/Loader";
 import { Link } from "react-router";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
+import useTitle from "../../../../hooks/useTitle";
 
 const rowVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -16,6 +17,7 @@ const rowVariants = {
 };
 
 const AllOrders = () => {
+  useTitle("All Orders");
   const axiosInstance = useAxios();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");

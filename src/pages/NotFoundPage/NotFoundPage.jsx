@@ -1,7 +1,9 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Link } from "react-router";
+import useTitle from "../../hooks/useTitle";
 
 const NotFoundPage = () => {
+  useTitle("Not Found");
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-6 text-center">
       {/* 404 Number */}

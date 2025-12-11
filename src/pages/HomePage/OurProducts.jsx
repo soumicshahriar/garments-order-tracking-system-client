@@ -3,7 +3,7 @@ import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import useAxios from "../../hooks/useAxios";
 import { Link } from "react-router";
 import Loader from "../Loader/Loader";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const OurProducts = () => {
   const axiosInstance = useAxios();

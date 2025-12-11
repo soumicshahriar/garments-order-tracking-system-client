@@ -3,9 +3,11 @@ import useAxios from "../../hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import { FaShoppingCart, FaHeart, FaChevronDown } from "react-icons/fa";
 import { Link } from "react-router";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
+import useTitle from "../../hooks/useTitle";
 
 const AllProducts = () => {
+  useTitle("All Products");
   const axiosInstance = useAxios();
   const [sortBy, setSortBy] = useState("newest");
   const [priceRange, setPriceRange] = useState([0, 15000]);

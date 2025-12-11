@@ -4,9 +4,11 @@ import useAxios from "../../../../hooks/useAxios";
 import useAuth from "../../../../hooks/useAuth";
 import Loader from "../../../Loader/Loader";
 import Swal from "sweetalert2";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
+import useTitle from "../../../../hooks/useTitle";
 
 const ManageProducts = () => {
+  useTitle("Manage Products");
   const axiosInstance = useAxios();
   const { user } = useAuth();
 

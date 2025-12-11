@@ -6,8 +6,10 @@ import OurProducts from "./OurProducts";
 import CustomerFeedback from "./CustomerFeedback";
 import PartnerShip from "./PartnerShip/PartnerShip";
 import Loader from "../Loader/Loader";
+import useTitle from "../../hooks/useTitle";
 
 const HomePage = () => {
+  useTitle("Home");
   const axiosInstance = useAxios();
 
   const { data: allProducts = [], isLoading } = useQuery({

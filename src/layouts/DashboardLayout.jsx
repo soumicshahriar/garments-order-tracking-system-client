@@ -1,5 +1,9 @@
-import { MdInventory, MdManageAccounts } from "react-icons/md";
-import { Link, Outlet } from "react-router";
+import {
+  MdInventory,
+  MdManageAccounts,
+  MdSpaceDashboard,
+} from "react-icons/md";
+import { NavLink, Outlet } from "react-router";
 import {
   HiOutlineCheckCircle,
   HiOutlineShoppingBag,
@@ -13,13 +17,17 @@ import {
   FiPlusSquare,
 } from "react-icons/fi";
 import useRole from "../hooks/useRole";
+import useTitle from "../hooks/useTitle";
 
 const DashboardLayout = () => {
+  useTitle("Dashboard");
   const { role } = useRole();
-  // console.log(role);
-  //
+
+  const activeClass =
+    "border-l-4 border-cyan-400 bg-gray-800/60 text-cyan-400 font-semibold";
+
   return (
-    <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900  min-h-screen">
+    <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 min-h-screen">
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 
@@ -33,11 +41,11 @@ const DashboardLayout = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                strokeLinejoin="round"
                 strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth="2"
                 fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
                 className="my-1.5 inline-block size-5"
               >
@@ -50,35 +58,35 @@ const DashboardLayout = () => {
               Dashboard
             </div>
           </nav>
+
           <div className="">
             <Outlet />
           </div>
         </div>
 
-        {/* Dashboard Sidebar */}
+        {/* Sidebar */}
         <div className="drawer-side is-drawer-close:overflow-visible">
-          <label
-            htmlFor="my-drawer-4"
-            aria-label="close sidebar"
-            className="drawer-overlay"
-          ></label>
+          <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
 
           <div className="flex min-h-full flex-col items-start bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 text-gray-200 shadow-xl border-r-2 border-r-cyan-900 is-drawer-close:w-14 is-drawer-open:w-64">
             <ul className="menu w-full grow">
-              {/* Home */}
+              {/* Homepage */}
               <li>
-                <Link
-                  to={"/"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60"
-                  data-tip="Homepage"
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 hover:bg-gray-800/60 ${
+                      isActive ? activeClass : ""
+                    }`
+                  }
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    strokeLinejoin="round"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
                     strokeWidth="2"
                     fill="none"
+                    viewBox="0 0 24 24"
                     stroke="currentColor"
                     className="my-1.5 inline-block size-5 text-cyan-400"
                   >
@@ -86,188 +94,203 @@ const DashboardLayout = () => {
                     <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                   </svg>
                   <span className="is-drawer-close:hidden">Homepage</span>
-                </Link>
+                </NavLink>
               </li>
-              {/* admin route */}
+
+              {/* Admin Routes */}
               {role === "admin" && (
                 <>
-                  {/* manage users */}
                   <li>
-                    <Link
-                      to={"/dashboard/manage-users"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="Manage Users"
+                    <NavLink
+                      to="/dashboard/admin-dashboard"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
-                      <MdManageAccounts className="text-cyan-400" size={20} />
+                      <MdSpaceDashboard size={20} className="text-cyan-400" />
+                      <span className="is-drawer-close:hidden">
+                        Admin Dashboard
+                      </span>
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to="/dashboard/manage-users"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
+                    >
+                      <MdManageAccounts size={20} className="text-cyan-400" />
                       <span className="is-drawer-close:hidden">
                         Manage Users
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
 
-                  {/* all products */}
                   <li>
-                    <Link
-                      to={"/dashboard/all-products"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="All Products"
+                    <NavLink
+                      to="/dashboard/all-products"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
-                      <MdInventory className="text-cyan-400" size={20} />
+                      <MdInventory size={20} className="text-cyan-400" />
                       <span className="is-drawer-close:hidden">
                         All Products
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
 
-                  {/* all Orders */}
                   <li>
-                    <Link
-                      to={"/dashboard/all-orders"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="All Orders"
+                    <NavLink
+                      to="/dashboard/all-orders"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
                       <AiOutlineOrderedList
-                        className="text-cyan-400"
                         size={20}
+                        className="text-cyan-400"
                       />
                       <span className="is-drawer-close:hidden">All Orders</span>
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               )}
 
-              {/* Manager route */}
-
+              {/* Manager Routes */}
               {role === "manager" && (
                 <>
-                  {/* add product */}
                   <li>
-                    <Link
-                      to={"/dashboard/add-product"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="Add Product"
+                    <NavLink
+                      to="/dashboard/add-product"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
-                      <FiPlusSquare className="text-cyan-400" size={20} />
+                      <FiPlusSquare size={20} className="text-cyan-400" />
                       <span className="is-drawer-close:hidden">
                         Add Product
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
-                  {/* manage products */}
+
                   <li>
-                    <Link
-                      to={"/dashboard/manage-products"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="Manage Products"
+                    <NavLink
+                      to="/dashboard/manage-products"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
-                      <FiPackage className="text-cyan-400" size={20} />
+                      <FiPackage size={20} className="text-cyan-400" />
                       <span className="is-drawer-close:hidden">
                         Manage Products
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
-                  {/* Pending Orders */}
+
                   <li>
-                    <Link
-                      to={"/dashboard/pending-orders"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="Pending Orders"
+                    <NavLink
+                      to="/dashboard/pending-orders"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
-                      <FiClock className="text-cyan-400" size={20} />
+                      <FiClock size={20} className="text-cyan-400" />
                       <span className="is-drawer-close:hidden">
                         Pending Orders
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
-                  {/* approved Orders */}
+
                   <li>
-                    <Link
-                      to={"/dashboard/approved-orders"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="Approved Orders"
+                    <NavLink
+                      to="/dashboard/approved-orders"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
-                      <FiCheckCircle className="text-green-400" size={20} />
+                      <FiCheckCircle size={20} className="text-green-400" />
                       <span className="is-drawer-close:hidden">
                         Approved Orders
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               )}
 
-              {/* buyer route */}
+              {/* Buyer Routes */}
               {role === "buyer" && (
                 <>
-                  {/* my orders */}
                   <li>
-                    <Link
-                      to={"/dashboard/my-orders"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="My Orders"
+                    <NavLink
+                      to="/dashboard/my-orders"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
                       <HiOutlineShoppingBag
-                        className="text-cyan-400"
                         size={20}
+                        className="text-cyan-400"
                       />
                       <span className="is-drawer-close:hidden">My Orders</span>
-                    </Link>
+                    </NavLink>
                   </li>
 
-                  {/* payment success */}
                   <li>
-                    <Link
-                      to={"/dashboard/payment-success"}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                      data-tip="Payment Success"
+                    <NavLink
+                      to="/dashboard/payment-success"
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                          isActive ? activeClass : ""
+                        }`
+                      }
                     >
                       <HiOutlineCheckCircle
-                        className="text-cyan-400"
                         size={20}
+                        className="text-cyan-400"
                       />
                       <span className="is-drawer-close:hidden">
                         Payment Success
                       </span>
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               )}
 
-              {/* profile */}
+              {/* Profile */}
               <li>
-                <Link
-                  to={"/dashboard/profile"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 flex items-center gap-2"
-                  data-tip="Profile"
+                <NavLink
+                  to="/dashboard/profile"
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 hover:bg-gray-800/60 ${
+                      isActive ? activeClass : ""
+                    }`
+                  }
                 >
-                  <HiOutlineUser className="text-blue-400" size={20} />
+                  <HiOutlineUser size={20} className="text-blue-400" />
                   <span className="is-drawer-close:hidden">Profile</span>
-                </Link>
+                </NavLink>
               </li>
-
-              {/* setting */}
-              {/* <li>
-                <button
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60"
-                  data-tip="Settings"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    strokeWidth="2"
-                    fill="none"
-                    stroke="currentColor"
-                    className="my-1.5 inline-block size-5 text-cyan-400"
-                  >
-                    <path d="M20 7h-9"></path>
-                    <path d="M14 17H5"></path>
-                    <circle cx="17" cy="17" r="3"></circle>
-                    <circle cx="7" cy="7" r="3"></circle>
-                  </svg>
-                  <span className="is-drawer-close:hidden">Settings</span>
-                </button>
-              </li> */}
             </ul>
           </div>
         </div>

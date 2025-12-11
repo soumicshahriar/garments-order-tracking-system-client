@@ -3,9 +3,11 @@ import React from "react";
 import { useParams } from "react-router";
 import useAxios from "../../../../hooks/useAxios";
 import Loader from "../../../Loader/Loader";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
+import useTitle from "../../../../hooks/useTitle";
 
 const OrderDetails = () => {
+  useTitle("Order Details");
   const { orderId } = useParams();
   const axiosInstance = useAxios();
 
@@ -33,7 +35,7 @@ const OrderDetails = () => {
         {/* LEFT SIDE – ORDER & CUSTOMER INFO */}
         <div className="lg:col-span-2 space-y-6">
           {/* ORDER INFO CARD */}
-          <div className="p-6 rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
+          <div className="p-6 rounded-xl bg-linear-to-br from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Order Information</h3>
 
             <div className="grid md:grid-cols-2 gap-4">
@@ -71,7 +73,7 @@ const OrderDetails = () => {
           </div>
 
           {/* CUSTOMER INFO */}
-          <div className="p-6 rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
+          <div className="p-6 rounded-xl bg-linear-to-br from-gray-900 to-gray-800 border border-gray-700 shadow-lg">
             <h3 className="text-xl font-semibold mb-4">Customer Information</h3>
 
             <div className="grid md:grid-cols-2 gap-4">

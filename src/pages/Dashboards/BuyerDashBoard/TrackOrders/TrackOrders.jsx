@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import Loader from "../../../Loader/Loader";
 import useAxios from "../../../../hooks/useAxios";
+import useTitle from "../../../../hooks/useTitle";
 
 const TrackOrders = () => {
+  useTitle("Track Order");
   const axiosInstance = useAxios();
   const { orderId } = useParams();
 

@@ -5,8 +5,9 @@ import toast from "react-hot-toast";
 import useAxios from "../../../../hooks/useAxios";
 import useAuth from "../../../../hooks/useAuth";
 import useSuspend from "../../../../hooks/useSuspend";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import Loader from "../../../Loader/Loader";
+import useTitle from "../../../../hooks/useTitle";
 
 const categories = [
   "Shirt",
@@ -22,6 +23,7 @@ const categories = [
 const paymentOption = ["Cash on Delivery", "PayFirst"];
 
 const AddProduct = () => {
+  useTitle("Add Product");
   const axiosInstance = useAxios();
   const [imagePreview, setImagePreview] = useState([]);
   const { user, loading } = useAuth();

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import useAxios from "../../../../hooks/useAxios";
+import useTitle from "../../../../hooks/useTitle";
 
 const PaymentSuccess = () => {
+   useTitle("Payment Success");
   const axiosInstance = useAxios();
   // get session id from the url after payment
   const [searchParams] = useSearchParams();
