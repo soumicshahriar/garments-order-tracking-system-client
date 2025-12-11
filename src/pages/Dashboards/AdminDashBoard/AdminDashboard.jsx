@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -23,7 +22,7 @@ const FILTERS = [
   { id: "30days", label: "30 Days" },
 ];
 
-const COLORS = ["#0088FE", "#FF8042", "#FFBB28"];
+const COLORS = ["#00eaff", "#ff6ec7", "#a0ff4d", "#ffa500", "#ff4d4d"];
 
 const AdminDashboard = () => {
   const axiosInstance = useAxios();
@@ -32,13 +31,28 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axiosInstance.get(`/admin/analytics?filter=${filter}`).then((res) => {
       setAnalytics(res.data);
       setLoading(false);
     });
-  }, [filter]);
+  }, [filter, axiosInstance]);
 
-  if (loading) return <Loader></Loader>;
+  // Aggregate chart data to sum sales for duplicate names
+  const aggregatedChartData = useMemo(() => {
+    if (!analytics) return [];
+    const map = {};
+    analytics.chartData.forEach((item) => {
+      if (map[item.name]) {
+        map[item.name].sales += item.sales;
+      } else {
+        map[item.name] = { ...item };
+      }
+    });
+    return Object.values(map);
+  }, [analytics]);
+
+  if (loading || !analytics) return <Loader />;
 
   return (
     <div className="p-5 md:p-10">
@@ -93,22 +107,48 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bar Chart */}
         <ChartWrapper title="Bar Chart">
-          <BarChart width={300} height={220} data={analytics.chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="sales" />
+          <BarChart width={300} height={220} data={aggregatedChartData}>
+            <CartesianGrid
+              stroke="rgba(255,255,255,0.1)"
+              strokeDasharray="3 3"
+            />
+            <XAxis dataKey="name" stroke="#e0e0e0" tick={{ fill: "#e0e0e0" }} />
+            <YAxis stroke="#e0e0e0" tick={{ fill: "#e0e0e0" }} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#121212",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+              }}
+            />
+            <Bar dataKey="sales" fill="#00eaff" radius={[6, 6, 0, 0]} />
           </BarChart>
         </ChartWrapper>
 
         {/* Line Chart */}
         <ChartWrapper title="Line Chart">
-          <LineChart width={300} height={220} data={analytics.chartData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="sales" strokeWidth={2} />
+          <LineChart width={300} height={220} data={aggregatedChartData}>
+            <CartesianGrid
+              stroke="rgba(255,255,255,0.1)"
+              strokeDasharray="3 3"
+            />
+            <XAxis dataKey="name" stroke="#e0e0e0" tick={{ fill: "#e0e0e0" }} />
+            <YAxis stroke="#e0e0e0" tick={{ fill: "#e0e0e0" }} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#121212",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+              }}
+            />
+            <Line
+              type="monotone"
+              dataKey="sales"
+              stroke="#00eaff"
+              strokeWidth={3}
+              dot={{ r: 4, fill: "#00eaff", stroke: "#00eaff" }}
+              activeDot={{ r: 6, strokeWidth: 2, stroke: "#00eaff" }}
+            />
           </LineChart>
         </ChartWrapper>
 
@@ -116,16 +156,24 @@ const AdminDashboard = () => {
         <ChartWrapper title="Pie Chart">
           <PieChart width={300} height={220}>
             <Pie
-              data={analytics.chartData}
+              data={aggregatedChartData}
               dataKey="sales"
               nameKey="name"
               outerRadius={90}
-              label
+              label={{ fill: "#e0e0e0", fontSize: 12, fontWeight: 500 }}
             >
-              {analytics.chartData.map((entry, index) => (
+              {aggregatedChartData.map((entry, index) => (
                 <Cell key={index} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#121212",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+              }}
+              itemStyle={{ color: "#fff" }}
+            />
           </PieChart>
         </ChartWrapper>
       </div>

@@ -117,19 +117,19 @@ const HeroBanner = ({ allProducts = [], isLoading }) => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8 }}
-                  className="relative"
+                  className="relative "
                 >
                   <motion.img
                     src={item.imageMain}
                     alt="main"
-                    className="rounded-xl w-72 lg:w-80 shadow-xl"
+                    className="rounded-xl w-72 lg:w-80 shadow-xl h-80"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.4 }}
                   />
                   <motion.img
                     src={item.imagePeek}
                     alt="peek"
-                    className="rounded-xl w-40 absolute -right-8 bottom-4 opacity-70 shadow-lg"
+                    className="rounded-xl w-40 absolute -right-8 bottom-4 opacity-70 shadow-lg h-32"
                     animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 3, repeat: Infinity }}
                   />

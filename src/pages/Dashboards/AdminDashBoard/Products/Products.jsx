@@ -206,7 +206,7 @@ const Products = () => {
                     price: Number(form.price.value),
                     category: form.category.value,
                     demoVideo: form.demoVideo.value,
-                    paymentOption: [form.paymentOption.value],
+                    paymentOption: form.paymentOption.value,
                   };
 
                   try {
@@ -263,7 +263,7 @@ const Products = () => {
                 <label className="block mb-1">Payment Options</label>
                 <select
                   name="paymentOption"
-                  defaultValue={selectedProduct.paymentOption[0]}
+                  defaultValue={selectedProduct.paymentOption}
                   className="select select-bordered w-full bg-gray-800 mb-4"
                 >
                   <option value="PayFirst">PayFirst</option>

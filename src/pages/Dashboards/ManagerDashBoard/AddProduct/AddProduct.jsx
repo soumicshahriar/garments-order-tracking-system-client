@@ -65,6 +65,9 @@ const AddProduct = () => {
       toast.success("Product created successfully!");
       reset();
       setImagePreview([]);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     },
     onError: () => toast.error("Failed to create product"),
   });
@@ -78,6 +81,9 @@ const AddProduct = () => {
       );
 
       toast.success("Images uploaded!", { id: toastId });
+      if (data.minimumOrderQuantity <= 0) {
+        return toast("please insert minimum order quantity at least 1");
+      }
 
       const productPayload = {
         title: data.title,
@@ -95,7 +101,7 @@ const AddProduct = () => {
         },
       };
 
-      console.log("FINAL PAYLOAD:", productPayload);
+      // console.log("FINAL PAYLOAD:", productPayload);
       mutation.mutate(productPayload);
     } catch (error) {
       toast.error("Image upload failed!");
@@ -184,6 +190,7 @@ const AddProduct = () => {
             />
             <motion.input
               type="number"
+              defaultValue={1}
               placeholder="Minimum Order Quantity"
               {...register("minimumOrderQuantity", { required: true })}
               className="p-3 rounded bg-gray-800 text-white"
@@ -227,7 +234,7 @@ const AddProduct = () => {
             className="w-full p-3 rounded bg-gray-800 text-white"
             whileFocus={{ scale: 1.02 }}
           >
-            <option value="">Select Payment Option</option>
+            <option disabled>Select Payment Option</option>
             {paymentOption.map((p) => (
               <option key={p}>{p}</option>
             ))}
@@ -238,14 +245,14 @@ const AddProduct = () => {
             Show on Home Page
           </label>
 
-          {status === "suspended" ? (
+          {status === "suspended" || status === "pending" ? (
             <motion.button
               type="submit"
               className="w-full bg-gray-600 p-3 rounded text-white mt-4"
               disabled
               whileHover={{ scale: 1.02 }}
             >
-              You are suspended
+              You are suspended / pending
             </motion.button>
           ) : (
             <motion.button

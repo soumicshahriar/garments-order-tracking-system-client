@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import Loader from "../../../Loader/Loader";
 import useTitle from "../../../../hooks/useTitle";
+import Swal from "sweetalert2";
 
 const rowVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -97,15 +98,49 @@ const ManageUsers = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    if (!window.confirm("Are you sure?")) return;
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete!",
+      background: "linear-gradient(to right, #1e1e2f, #2c2c3f, #1e1e2f)",
+      color: "#ffffff", // Text color
+      backdrop: `
+      rgba(0,0,0,0.75)
+      left top
+      no-repeat
+    `,
+      showClass: {
+        popup: "swal2-show animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "swal2-hide animate__animated animate__fadeOutUp",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosInstance.delete(`/users/${id}`);
+          toast.success("User deleted successfully!");
 
-    try {
-      await axiosInstance.delete(`/users/${id}`);
-      toast.success("User deleted");
-      refetch();
-    } catch {
-      toast.error("Failed to delete user");
-    }
+          refetch(); // Refresh table
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "User has been removed.",
+            icon: "success",
+            background: "linear-gradient(to right, #1e1e2f, #2c2c3f, #1e1e2f)",
+            color: "#ffffff",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        } catch (error) {
+          toast.error("Failed to delete user");
+        }
+      }
+    });
   };
 
   const submitSuspension = async () => {
@@ -267,6 +302,7 @@ const ManageUsers = () => {
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleStatusChange(user._id, "approved")}
                       disabled={user.status === "approved"}
+                      title="approved"
                       className={`btn btn-sm ${
                         user.status === "approved"
                           ? "btn-disabled"
@@ -279,6 +315,7 @@ const ManageUsers = () => {
                     <motion.button
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setSuspendUser(user)}
+                      title="suspend"
                       disabled={user.status === "suspended"}
                       className={`btn btn-sm ${
                         user.status === "suspended"
@@ -291,6 +328,7 @@ const ManageUsers = () => {
 
                     <motion.button
                       whileTap={{ scale: 0.9 }}
+                      title="delete"
                       onClick={() => handleDeleteUser(user._id)}
                       className="btn btn-sm btn-warning"
                     >

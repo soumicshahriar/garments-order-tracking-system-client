@@ -197,7 +197,10 @@ const Navbar = () => {
               {/* Mobile Auth Buttons */}
               <div className="pt-3 sm:pt-4 border-t border-gray-700 space-y-2">
                 {user ? (
-                  <button className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm sm:text-base rounded-lg font-medium transition-colors duration-300">
+                  <button
+                    onClick={handleLogOut}
+                    className="w-full flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm sm:text-base rounded-lg font-medium transition-colors duration-300"
+                  >
                     <FaSignOutAlt className="text-base sm:text-lg" />
                     <span>Logout</span>
                   </button>
