@@ -23,15 +23,14 @@ const DashboardLayout = () => {
   useTitle("Dashboard");
   const { role } = useRole();
 
-  const activeClass =
-    "border-l-4 border-cyan-400 bg-gray-800/60 text-cyan-400 font-semibold";
+  const activeClass = "bg-gray-800 text-cyan-400 border-l-4 border-cyan-400";
 
   return (
     <div className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 min-h-screen">
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 
-        {/* Dashboard Top Navbar */}
+        {/* Top Navbar */}
         <div className="drawer-content">
           <nav className="navbar w-full bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 text-gray-200 shadow-xl">
             <label
@@ -41,11 +40,11 @@ const DashboardLayout = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                strokeLinecap="round"
+                viewBox="0 0 24 24"
                 strokeLinejoin="round"
+                strokeLinecap="round"
                 strokeWidth="2"
                 fill="none"
-                viewBox="0 0 24 24"
                 stroke="currentColor"
                 className="my-1.5 inline-block size-5"
               >
@@ -58,7 +57,6 @@ const DashboardLayout = () => {
               Dashboard
             </div>
           </nav>
-
           <div className="">
             <Outlet />
           </div>
@@ -75,18 +73,17 @@ const DashboardLayout = () => {
                 <NavLink
                   to="/"
                   className={({ isActive }) =>
-                    `flex items-center gap-2 hover:bg-gray-800/60 ${
+                    `is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-gray-800/60 ${
                       isActive ? activeClass : ""
                     }`
                   }
+                  data-tip="Homepage"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    viewBox="0 0 24 24"
                     strokeWidth="2"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
                     className="my-1.5 inline-block size-5 text-cyan-400"
                   >
@@ -97,69 +94,81 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
 
-              {/* Admin Routes */}
+              {/* Admin */}
               {role === "admin" && (
                 <>
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Admin Dashboard"
+                  >
                     <NavLink
                       to="/dashboard/admin-dashboard"
                       className={({ isActive }) =>
-                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                        `flex items-center gap-2  hover:bg-gray-800/60 ${
                           isActive ? activeClass : ""
                         }`
                       }
                     >
-                      <MdSpaceDashboard size={20} className="text-cyan-400" />
+                      <MdSpaceDashboard className="text-cyan-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         Admin Dashboard
                       </span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Manage Users"
+                  >
                     <NavLink
                       to="/dashboard/manage-users"
                       className={({ isActive }) =>
-                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                        `flex items-center gap-2 hover:bg-gray-800/60  ${
                           isActive ? activeClass : ""
                         }`
                       }
                     >
-                      <MdManageAccounts size={20} className="text-cyan-400" />
+                      <MdManageAccounts className="text-cyan-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         Manage Users
                       </span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="All Products"
+                  >
                     <NavLink
                       to="/dashboard/all-products"
                       className={({ isActive }) =>
-                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                        `flex items-center gap-2 hover:bg-gray-800/60  ${
                           isActive ? activeClass : ""
                         }`
                       }
                     >
-                      <MdInventory size={20} className="text-cyan-400" />
+                      <MdInventory className="text-cyan-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         All Products
                       </span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="All Orders"
+                  >
                     <NavLink
                       to="/dashboard/all-orders"
                       className={({ isActive }) =>
-                        `flex items-center gap-2 hover:bg-gray-800/60 ${
+                        `flex items-center gap-2 hover:bg-gray-800/60  ${
                           isActive ? activeClass : ""
                         }`
                       }
                     >
                       <AiOutlineOrderedList
-                        size={20}
                         className="text-cyan-400"
+                        size={20}
                       />
                       <span className="is-drawer-close:hidden">All Orders</span>
                     </NavLink>
@@ -167,10 +176,13 @@ const DashboardLayout = () => {
                 </>
               )}
 
-              {/* Manager Routes */}
+              {/* Manager */}
               {role === "manager" && (
                 <>
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Add Product"
+                  >
                     <NavLink
                       to="/dashboard/add-product"
                       className={({ isActive }) =>
@@ -179,14 +191,17 @@ const DashboardLayout = () => {
                         }`
                       }
                     >
-                      <FiPlusSquare size={20} className="text-cyan-400" />
+                      <FiPlusSquare className="text-cyan-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         Add Product
                       </span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Manage Products"
+                  >
                     <NavLink
                       to="/dashboard/manage-products"
                       className={({ isActive }) =>
@@ -195,14 +210,17 @@ const DashboardLayout = () => {
                         }`
                       }
                     >
-                      <FiPackage size={20} className="text-cyan-400" />
+                      <FiPackage className="text-cyan-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         Manage Products
                       </span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Pending Orders"
+                  >
                     <NavLink
                       to="/dashboard/pending-orders"
                       className={({ isActive }) =>
@@ -211,14 +229,17 @@ const DashboardLayout = () => {
                         }`
                       }
                     >
-                      <FiClock size={20} className="text-cyan-400" />
+                      <FiClock className="text-cyan-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         Pending Orders
                       </span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Approved Orders"
+                  >
                     <NavLink
                       to="/dashboard/approved-orders"
                       className={({ isActive }) =>
@@ -227,7 +248,7 @@ const DashboardLayout = () => {
                         }`
                       }
                     >
-                      <FiCheckCircle size={20} className="text-green-400" />
+                      <FiCheckCircle className="text-green-400" size={20} />
                       <span className="is-drawer-close:hidden">
                         Approved Orders
                       </span>
@@ -236,10 +257,13 @@ const DashboardLayout = () => {
                 </>
               )}
 
-              {/* Buyer Routes */}
+              {/* Buyer */}
               {role === "buyer" && (
                 <>
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="My Orders"
+                  >
                     <NavLink
                       to="/dashboard/my-orders"
                       className={({ isActive }) =>
@@ -249,14 +273,17 @@ const DashboardLayout = () => {
                       }
                     >
                       <HiOutlineShoppingBag
-                        size={20}
                         className="text-cyan-400"
+                        size={20}
                       />
                       <span className="is-drawer-close:hidden">My Orders</span>
                     </NavLink>
                   </li>
 
-                  <li>
+                  <li
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Payment Success"
+                  >
                     <NavLink
                       to="/dashboard/payment-success"
                       className={({ isActive }) =>
@@ -266,8 +293,8 @@ const DashboardLayout = () => {
                       }
                     >
                       <HiOutlineCheckCircle
-                        size={20}
                         className="text-cyan-400"
+                        size={20}
                       />
                       <span className="is-drawer-close:hidden">
                         Payment Success
@@ -278,7 +305,10 @@ const DashboardLayout = () => {
               )}
 
               {/* Profile */}
-              <li>
+              <li
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Profile"
+              >
                 <NavLink
                   to="/dashboard/profile"
                   className={({ isActive }) =>
@@ -287,7 +317,7 @@ const DashboardLayout = () => {
                     }`
                   }
                 >
-                  <HiOutlineUser size={20} className="text-blue-400" />
+                  <HiOutlineUser className="text-blue-400" size={20} />
                   <span className="is-drawer-close:hidden">Profile</span>
                 </NavLink>
               </li>
