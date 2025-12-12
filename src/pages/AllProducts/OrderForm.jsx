@@ -19,6 +19,9 @@ const OrderForm = () => {
   const navigate = useNavigate();
 
   const { status } = useSuspend();
+  if (!user) {
+    navigate("/login");
+  }
 
   const { data: product = [], isLoading } = useQuery({
     queryKey: ["single-product", id],
