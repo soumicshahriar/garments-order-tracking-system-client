@@ -6,7 +6,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
 
-// Register page: uses react-hook-form for validation and react-hot-toast for feedback
 const Register = () => {
   const { createUser, updateUserProfile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -20,40 +19,71 @@ const Register = () => {
   const navigate = useNavigate();
   const axiosInstance = useAxios();
 
+  // Upload image to imgbb
+  const uploadImageToImgBB = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const url = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_img_api_key
+    }`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      return result.data.url;
+    } else {
+      throw new Error("Image upload failed");
+    }
+  };
+
   const onSubmit = async (data) => {
-    const payload = {
-      name: data.name,
-      email: data.email,
-      photoURL: data.photoURL || "",
-      role: data.role,
-      status: "pending",
-    };
+    setIsLoading(true);
 
     try {
-      // Step 1: Create user in Firebase
+      // Step 1: Upload image file to imgbb
+      let imageUrl = "";
+      if (data.photoFile && data.photoFile[0]) {
+        imageUrl = await uploadImageToImgBB(data.photoFile[0]);
+      }
+
+      const payload = {
+        name: data.name,
+        email: data.email,
+        photoURL: imageUrl, // <-- stored imgbb URL
+        role: data.role,
+        status: "pending",
+      };
+
+      // Step 2: Create user in Firebase
       const authResult = await createUser(data.email, data.password);
       if (!authResult.user) throw new Error("Firebase authentication failed");
 
-      // Step 2: Update Firebase profile
+      // Step 3: Update Firebase Auth profile
       await updateUserProfile({
         displayName: data.name,
-        photoURL: data.photoURL,
+        photoURL: imageUrl,
       });
 
-      // Step 2: Send user data to backend
+      // Step 4: Send user to backend
       await axiosInstance.post("/users", payload);
 
-      // Step 3: Show success toast and redirect
       toast.success("Account created successfully!");
       reset();
       navigate("/");
     } catch (error) {
       console.log(error);
-      toast.error("Email is already used");
+      toast.error("Something went wrong. Try again!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Custom password validator to provide specific error messages
   const validatePassword = (value) => {
     if (!/[A-Z]/.test(value))
       return "Password must contain at least one uppercase letter";
@@ -64,7 +94,7 @@ const Register = () => {
   };
 
   return (
-    <div className=" flex items-center justify-center px-4 mt-20">
+    <div className="flex items-center justify-center px-4 mt-20">
       <div className="w-full max-w-md bg-gray-900/60 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-lg">
         <h2 className="text-2xl font-semibold text-cyan-300 text-center mb-4">
           Create an account
@@ -98,15 +128,22 @@ const Register = () => {
             )}
           </div>
 
+          {/* ------------ PHOTO FILE UPLOAD -------------- */}
           <div>
             <label className="block text-gray-300 text-sm mb-1">
-              Photo URL
+              Upload Photo
             </label>
             <input
-              {...register("photoURL")}
+              type="file"
+              accept="image/*"
+              {...register("photoFile", { required: "Photo is required" })}
               className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 text-gray-100"
-              placeholder="https://..."
             />
+            {errors.photoFile && (
+              <p className="text-red-400 text-sm mt-1">
+                {errors.photoFile.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -133,7 +170,6 @@ const Register = () => {
                 type="button"
                 onClick={() => setShowPassword((s) => !s)}
                 className="absolute right-2 top-3.5 text-gray-300"
-                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
