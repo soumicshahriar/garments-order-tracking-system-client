@@ -24,6 +24,12 @@ import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import AdminDashboard from "../pages/Dashboards/AdminDashBoard/AdminDashboard";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import ContactInfo from "../pages/ContactInfo/ContactInfo";
+import AdminRoute from "./AdminRoute/AdminRoute";
+import ManagerRoute from "./ManagerRoute/ManagerRoute";
+import PrivacyPolicy from "../pages/Policy/PrivacyPolicy";
+import TermsCondition from "../pages/Policy/TermsCondition";
+import RefundPolicy from "../pages/Policy/RefundPolicy";
+import ShippingPolicy from "../pages/Policy/ShippingPolicy";
 
 export const router = createBrowserRouter([
   {
@@ -38,8 +44,16 @@ export const router = createBrowserRouter([
       { path: "order-form/:id", Component: OrderForm },
       { path: "register", Component: Register },
       { path: "login", Component: Login },
+
+      // policy related route
+      { path: "privacy", Component: PrivacyPolicy },
+      { path: "terms", Component: TermsCondition },
+      { path: "refund", Component: RefundPolicy },
+      { path: "shipping", Component: ShippingPolicy },
     ],
   },
+
+  // dashboard route
   {
     path: "dashboard",
     element: (
@@ -51,16 +65,72 @@ export const router = createBrowserRouter([
       // admin route
 
       { path: "admin-dashboard", Component: AdminDashboard },
-      { path: "manage-users", Component: ManageUsers },
-      { path: "all-products", Component: Products },
-      { path: "all-orders", Component: AllOrders },
-      { path: "order-details/:orderId", Component: OrderDetails },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers></ManageUsers>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-products",
+        element: (
+          <AdminRoute>
+            <Products></Products>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-orders",
+        element: (
+          <AdminRoute>
+            <AllOrders></AllOrders>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "order-details/:orderId",
+        element: (
+          <AdminRoute>
+            <OrderDetails></OrderDetails>
+          </AdminRoute>
+        ),
+      },
 
       // manager dashboard
-      { path: "add-product", Component: AddProduct },
-      { path: "manage-products", Component: ManageProducts },
-      { path: "pending-orders", Component: PendingOrders },
-      { path: "approved-orders", Component: ApproveOrders },
+      {
+        path: "add-product",
+        element: (
+          <ManagerRoute>
+            <AddProduct></AddProduct>
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "manage-products",
+        element: (
+          <ManagerRoute>
+            <ManageProducts></ManageProducts>
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "pending-orders",
+        element: (
+          <ManagerRoute>
+            <PendingOrders></PendingOrders>
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "approved-orders",
+        element: (
+          <ManagerRoute>
+            <ApproveOrders></ApproveOrders>
+          </ManagerRoute>
+        ),
+      },
 
       // buyer route
       { path: "my-orders", Component: MyOrders },
@@ -71,6 +141,8 @@ export const router = createBrowserRouter([
       { path: "profile", Component: MyProfile },
     ],
   },
+
+  // error for all pages
   {
     path: "*",
     Component: NotFoundPage,

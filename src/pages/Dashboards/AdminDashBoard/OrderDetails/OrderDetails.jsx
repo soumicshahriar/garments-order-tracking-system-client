@@ -26,7 +26,7 @@ const OrderDetails = () => {
   const timeline = orderDetails?.tracking || [];
 
   return (
-    <div className="p-4 md:p-8 text-white">
+    <div className="p-4 md:p-8 text-white ">
       {/* HEADER */}
       <h2 className="text-2xl font-bold mb-6">Order Details</h2>
 

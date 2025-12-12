@@ -140,7 +140,7 @@ const Products = () => {
                   <td className="font-semibold">{product.title}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
-                  <td>{product.createdBy?.name}</td>
+                  <td>{product?.managerInfo?.managerEmail}</td>
 
                   <td>
                     <motion.button

@@ -5,6 +5,7 @@ import { FaShoppingCart, FaHeart, FaChevronDown } from "react-icons/fa";
 import { Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import useTitle from "../../hooks/useTitle";
+import Loader from "../Loader/Loader";
 
 const AllProducts = () => {
   useTitle("All Products");
@@ -139,23 +140,7 @@ const AllProducts = () => {
   };
 
   if (isLoading) {
-    return (
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="py-12 sm:py-16 md:py-20 lg:py-24 bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="rounded-full h-16 w-16 border-t-4 border-cyan-500 border-solid"
-            ></motion.div>
-          </div>
-        </div>
-      </motion.section>
-    );
+    return <Loader></Loader>;
   }
 
   if (isError) {
@@ -186,36 +171,8 @@ const AllProducts = () => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="py-12 sm:py-16 md:py-20 lg:py-24 min-h-screen relative overflow-hidden"
+      className=" pt-12 md:py-20 lg:py-24 min-h-screen relative overflow-hidden"
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"
-        />
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Page Header */}
         <motion.div

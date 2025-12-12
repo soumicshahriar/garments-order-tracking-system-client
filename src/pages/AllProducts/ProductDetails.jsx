@@ -49,7 +49,7 @@ const ProductDetails = () => {
 
   return (
     <motion.div
-      className="product-details-container"
+      className="product-details-container "
       initial="hidden"
       animate="visible"
       variants={fadeUp}

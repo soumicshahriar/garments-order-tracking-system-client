@@ -16,7 +16,7 @@ const stagger = {
 
 const AboutUs = () => {
   return (
-    <section className="mt-10 md:mt-20 px-4 md:px-10 lg:px-20 pb-10">
+    <section className="mt-10 md:mt-20 px-4 md:px-10 lg:px-20 pb-10 ">
       {/* Hero Section */}
       <motion.div
         initial="hidden"
@@ -24,10 +24,10 @@ const AboutUs = () => {
         variants={fadeUp}
         className="text-center mb-12"
       >
-        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl md:text-5xl font-bold text-white dark:text-white">
           About Us
         </h1>
-        <p className="mt-4 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p className="mt-4 text-gray-400 dark:text-gray-300 max-w-2xl mx-auto">
           We provide a complete garments order tracking system to manage orders,
           production, inventory, and delivery from one dashboard.
         </p>
@@ -44,17 +44,17 @@ const AboutUs = () => {
         <motion.div variants={fadeUp}>
           <h2
             class
-            Name="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4"
+            Name="text-2xl md:text-3xl font-semibold text-white dark:text-white mb-4"
           >
             Who We Are
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+          <p className="text-gray-400 dark:text-gray-300 mb-4 leading-relaxed">
             Our system helps garments factories and managers keep all production
             updates organized in real-time. From placing orders to dispatching
             finished products, all operations are handled smoothly.
           </p>
 
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+          <p className="text-gray-400 dark:text-gray-300 leading-relaxed">
             With automation and transparency, we aim to reduce manual workload,
             minimize errors, and streamline the complete workflow.
           </p>
@@ -79,12 +79,12 @@ const AboutUs = () => {
       >
         <motion.div
           variants={fadeUp}
-          className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700"
+          className="p-6 rounded-xl shadow-md bg-cyan-900  border dark:border-gray-700"
         >
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-bold text-white dark:text-white">
             📦 Our Mission
           </h3>
-          <p className="mt-3 text-gray-600 dark:text-gray-300">
+          <p className="mt-3 text-gray-200 dark:text-gray-300">
             To help garments industries manage orders and production more
             efficiently with smart tracking tools.
           </p>
@@ -92,12 +92,12 @@ const AboutUs = () => {
 
         <motion.div
           variants={fadeUp}
-          className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700"
+          className="p-6 rounded-xl shadow-md bg-cyan-900  border dark:border-gray-700"
         >
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-bold text-white dark:text-white">
             👕 Our Vision
           </h3>
-          <p className="mt-3 text-gray-600 dark:text-gray-300">
+          <p className="mt-3 text-gray-200 dark:text-gray-300">
             To become the most reliable digital solution for the apparel
             manufacturing ecosystem.
           </p>
@@ -105,12 +105,12 @@ const AboutUs = () => {
 
         <motion.div
           variants={fadeUp}
-          className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700"
+          className="p-6 rounded-xl shadow-md bg-cyan-900  border dark:border-gray-700"
         >
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-bold text-white dark:text-white">
             🚀 Our Goal
           </h3>
-          <p className="mt-3 text-gray-600 dark:text-gray-300">
+          <p className="mt-3 text-gray-200 dark:text-gray-300">
             Simplify production tracking and deliver seamless experiences to
             factory managers, buyers, and workers.
           </p>

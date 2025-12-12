@@ -41,7 +41,8 @@ const OurProducts = () => {
               Error: {error?.message || "Failed to fetch products"}
             </p>
             <p className="text-gray-600 text-sm mt-2">
-              Make sure the API is running at http://localhost:3000
+              Make sure the API is running at
+              https://garments-order-tracker-system-serve.vercel.app
             </p>
           </div>
         </div>

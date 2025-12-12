@@ -80,7 +80,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 ">
         <StatCard
           title="Total Products"
           value={analytics.products.totalProducts}
@@ -188,7 +188,7 @@ const StatCard = ({ title, value }) => (
     animate={{ opacity: 1, y: 0 }}
     className="bg-gray-900 p-5 rounded-lg shadow text-center"
   >
-    <h4 className="text-gray-600 text-sm">{title}</h4>
+    <h4 className="text-gray-400 text-sm">{title}</h4>
     <p className="text-3xl font-bold">{value}</p>
   </motion.div>
 );

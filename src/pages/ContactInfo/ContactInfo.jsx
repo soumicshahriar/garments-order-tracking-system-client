@@ -15,7 +15,7 @@ const stagger = {
 
 const ContactInfo = () => {
   return (
-    <section className="mt-10 md:mt-20 px-4 md:px-10 lg:px-20 pb-2">
+    <section className="pt-10 md:mt-20 px-4 md:px-10 lg:px-20 lg:pb-2">
       {/* HEADER */}
       <motion.div
         initial="hidden"
@@ -23,10 +23,10 @@ const ContactInfo = () => {
         variants={fadeUp}
         className="text-center mb-12"
       >
-        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl md:text-5xl font-bold text-white ">
           Contact Us
         </h1>
-        <p className="mt-4 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p className="mt-4 text-gray-200 max-w-2xl mx-auto">
           Reach out to us anytime — we’re here to help with your garments order
           tracking system.
         </p>
@@ -52,54 +52,44 @@ const ContactInfo = () => {
         <motion.div variants={fadeUp}>
           <div className="grid grid-cols-1 gap-6">
             {/* Email */}
-            <div className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700 flex items-start gap-4">
+            <div className="p-6 rounded-xl shadow-md  bg-gray-900 border border-gray-700 flex items-start gap-4">
               <FiMail size={28} className="text-blue-500" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Email
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  support@garmentsystem.com
-                </p>
+                <h3 className="text-lg font-semibold  text-white">Email</h3>
+                <p className=" text-white">support@garmentsystem.com</p>
               </div>
             </div>
 
             {/* Phone */}
-            <div className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700 flex items-start gap-4">
+            <div className="p-6 rounded-xl shadow-md  bg-gray-900 border border-gray-700 flex items-start gap-4">
               <FiPhone size={28} className="text-green-500" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Phone
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  +880 1234-567890
-                </p>
+                <h3 className="text-lg font-semibold  text-white">Phone</h3>
+                <p className=" text-gray-300">+880 1234-567890</p>
               </div>
             </div>
 
             {/* Address */}
-            <div className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700 flex items-start gap-4">
+            <div className="p-6 rounded-xl shadow-md  bg-gray-900 border border-gray-700 flex items-start gap-4">
               <FiMapPin size={28} className="text-red-500" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold  text-white">
                   Office Location
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className=" text-gray-300">
                   Uttara Sector 10, Dhaka, Bangladesh
                 </p>
               </div>
             </div>
 
             {/* Working Hours */}
-            <div className="p-6 rounded-xl shadow-md bg-white dark:bg-gray-900 border dark:border-gray-700 flex items-start gap-4">
+            <div className="p-6 rounded-xl shadow-md  bg-gray-900 border border-gray-700 flex items-start gap-4">
               <FiClock size={28} className="text-purple-500" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold  text-white">
                   Working Hours
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Sat – Thu: 10:00 AM – 8:00 PM
-                </p>
+                <p className=" text-gray-300">Sat – Thu: 10:00 AM – 8:00 PM</p>
               </div>
             </div>
           </div>
@@ -113,7 +103,7 @@ const ContactInfo = () => {
         variants={fadeUp}
         className="mt-16"
       >
-        {/* <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+        {/* <h2 className="text-2xl font-bold  text-white mb-4">
           Our Location
         </h2>
 

@@ -10,12 +10,11 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import useRole from "../../../hooks/useRole";
+import AppLogo from "../../AppLogo/AppLogo";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useAuth();
-
-  console.log("user", user);
   const navigate = useNavigate();
   const { role } = useRole();
   console.log(role);
@@ -68,14 +67,9 @@ const Navbar = () => {
           {/* Logo */}
           <div className="shrink-0">
             <a href="/" className="flex items-center group">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-linear-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-sm sm:text-lg lg:text-xl">
-                  GO
-                </span>
+              <div>
+                <AppLogo></AppLogo>
               </div>
-              <span className="hidden sm:block ml-2 sm:ml-3 text-sm sm:text-lg lg:text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-400 whitespace-nowrap">
-                Garments Order
-              </span>
             </a>
           </div>
 
