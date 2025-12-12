@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Link, useParams } from "react-router";
 import useAxios from "../../hooks/useAxios";
-import "./ProductDetails.css";
 import useAuth from "../../hooks/useAuth";
 import Loader from "../Loader/Loader";
 import { motion } from "framer-motion";
@@ -16,12 +15,10 @@ const fadeUp = {
 const ProductDetails = () => {
   useTitle("Product Details");
   const { user } = useAuth();
-
   const axiosInstance = useAxios();
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
 
-  // get user by email
   const { data: userData = [], isLoading } = useQuery({
     queryKey: ["users", user?.email],
     queryFn: async () => {
@@ -41,37 +38,42 @@ const ProductDetails = () => {
   });
 
   if (isLoading) return <Loader />;
-  if (error) return <div className="error">Error loading product details</div>;
-  if (!product._id) return <div className="error">Product not found</div>;
+  if (error)
+    return (
+      <div className="text-center text-red-500 py-10">
+        Error loading product details
+      </div>
+    );
+  if (!product._id)
+    return (
+      <div className="text-center text-red-500 py-10">Product not found</div>
+    );
 
   const images = product.images || [product.image];
   const currentImage = images[selectedImage] || product.image;
 
   return (
     <motion.div
-      className="product-details-container "
+      className="max-w-7xl mx-auto p-4 mt-10 md:p-6 lg:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10"
       initial="hidden"
       animate="visible"
       variants={fadeUp}
     >
-      {/* Product Images Section */}
+      {/* Images Section */}
       <motion.div
-        className="product-images-section"
+        className="space-y-5"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.7 }}
       >
         {/* Main Image */}
         <motion.div
-          className="main-image"
+          className="rounded-xl overflow-hidden shadow-lg bg-gray-800"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
         >
           {product.demoVideo ? (
             <motion.iframe
-              width="100%"
-              height="400"
+              className="w-full h-64 md:h-80 lg:h-96 rounded-xl"
               src={product.demoVideo}
               title="Product Demo"
               frameBorder="0"
@@ -84,8 +86,8 @@ const ProductDetails = () => {
             <motion.img
               src={currentImage}
               alt={product.title}
+              className="w-full h-64 md:h-80 lg:h-96 object-cover rounded-xl"
               whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.3 }}
             />
           )}
         </motion.div>
@@ -93,18 +95,19 @@ const ProductDetails = () => {
         {/* Thumbnails */}
         {images.length > 1 && (
           <motion.div
-            className="image-thumbnails"
+            className="flex gap-3 overflow-x-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
           >
             {images.map((img, index) => (
               <motion.img
                 key={index}
                 src={img}
-                alt={`${product.title}-${index}`}
-                className={`thumbnail ${
-                  selectedImage === index ? "active" : ""
+                alt="Thumbnail"
+                className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 transition-all ${
+                  selectedImage === index
+                    ? "border-cyan-400"
+                    : "border-gray-700"
                 }`}
                 whileHover={{ scale: 1.15 }}
                 onClick={() => setSelectedImage(index)}
@@ -114,109 +117,77 @@ const ProductDetails = () => {
         )}
       </motion.div>
 
-      {/* Product Information Section */}
+      {/* Info Section */}
       <motion.div
-        className="product-info-section"
+        className="space-y-5 text-gray-200"
         initial={{ opacity: 0, x: 60 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.7 }}
       >
-        {/* Product Title */}
-        <motion.h1
-          className="product-title"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
+        <motion.h1 className="text-3xl md:text-4xl font-bold text-cyan-400">
           {product.title}
         </motion.h1>
 
-        {/* Category */}
-        <motion.p
-          className="product-category"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <span className="label">Category:</span> {product.category}
+        <motion.p className="text-lg">
+          <span className="font-semibold text-gray-400">Category:</span>{" "}
+          {product.category}
         </motion.p>
 
-        {/* Description */}
-        <motion.div
-          className="product-description"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h3>Description</h3>
-          <p>{product.description}</p>
+        <motion.div className="bg-gray-900/40 p-4 rounded-xl">
+          <h3 className="text-xl font-semibold mb-2">Description</h3>
+          <p className="text-gray-300">{product.description}</p>
         </motion.div>
 
-        {/* Details Grid */}
-        <motion.div
-          className="product-details-grid"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className="detail-item">
-            <span className="detail-label">Price</span>
-            <span className="detail-value price">${product.price}</span>
+        {/* Grid Info */}
+        <motion.div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-gray-900/50 p-4 rounded-xl">
+            <p className="text-gray-400">Price</p>
+            <p className="text-xl font-semibold text-cyan-300">
+              ${product.price}
+            </p>
           </div>
 
-          <div className="detail-item">
-            <span className="detail-label">Available Quantity</span>
-            <span className="detail-value">
+          <div className="bg-gray-900/50 p-4 rounded-xl">
+            <p className="text-gray-400">Available</p>
+            <p className="text-xl font-semibold">
               {product.availableQuantity} units
-            </span>
+            </p>
           </div>
 
-          <div className="detail-item">
-            <span className="detail-label">Minimum Order</span>
-            <span className="detail-value">
+          <div className="bg-gray-900/50 p-4 rounded-xl">
+            <p className="text-gray-400">Min Order</p>
+            <p className="text-xl font-semibold">
               {product.minimumOrderQuantity} units
-            </span>
+            </p>
           </div>
         </motion.div>
 
         {/* Payment Options */}
         {product.paymentOption && product.paymentOption.length > 0 && (
-          <motion.div
-            className="payment-options"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <h3>Payment Options</h3>
-            <ul className="payment-list">{product.paymentOption}</ul>
+          <motion.div className="bg-gray-900/50 p-4 rounded-xl">
+            <h3 className="text-xl font-semibold mb-2">Payment Options</h3>
+            <p>{product.paymentOption}</p>
           </motion.div>
         )}
 
         {/* Order Button */}
         {userObj?.role === "buyer" && (
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }}>
             <Link
               to={`/order-form/${product._id}`}
-              className="order-button text-center"
-              disabled={
+              className={`block text-center py-3 rounded-xl font-semibold text-white ${
                 product.availableQuantity < product.minimumOrderQuantity
-              }
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-linear-to-r from-cyan-500 to-blue-600 hover:shadow-lg"
+              }`}
             >
               Order Now
             </Link>
           </motion.div>
         )}
 
+        {/* Out of Stock */}
         {product.availableQuantity < product.minimumOrderQuantity && (
-          <motion.p
-            className="out-of-stock"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
+          <motion.p className="text-red-400 font-semibold">
             Out of Stock
           </motion.p>
         )}
