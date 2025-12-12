@@ -8,8 +8,8 @@ A modern, responsive, and full-featured frontend application built for managing 
 ## 👥 Admin & Manager Access  
 | Role | Email | Password |
 |------|--------|-----------|
-| Admin | admin@example.com | admin123 |
-| Manager | manager@example.com | manager123 |
+| Admin | admin@gmail.com | Admin@ |
+| Manager | manager@gmail.com | Manager@ |
 
 > Replace these with your actual credentials.
 
