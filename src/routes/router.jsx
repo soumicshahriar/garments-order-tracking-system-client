@@ -41,7 +41,14 @@ export const router = createBrowserRouter([
       { path: "about-us", Component: AboutUs },
       { path: "contact-info", Component: ContactInfo },
       { path: "product-details/:id", Component: ProductDetails },
-      { path: "order-form/:id", Component: OrderForm },
+      {
+        path: "order-form/:id",
+        element: (
+          <PrivateRoute>
+            <OrderForm></OrderForm>
+          </PrivateRoute>
+        ),
+      },
       { path: "register", Component: Register },
       { path: "login", Component: Login },
 

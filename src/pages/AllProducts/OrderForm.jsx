@@ -19,9 +19,6 @@ const OrderForm = () => {
   const navigate = useNavigate();
 
   const { status } = useSuspend();
-  if (!user) {
-    navigate("/login");
-  }
 
   const { data: product = [], isLoading } = useQuery({
     queryKey: ["single-product", id],
@@ -162,7 +159,7 @@ const OrderForm = () => {
           <label className="block mb-1 font-medium">Order Quantity</label>
           <input
             type="number"
-            value={quantity}
+            defaultValue={quantity}
             onChange={handleQuantityChange}
             className="w-full p-2 rounded bg-gray-800"
             min={product.minimumOrderQuantity}
